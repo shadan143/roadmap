@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript Mastery Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --card: #16161f;
+    --border: #2a2a3a;
+    --accent: #f7c948;
+    --accent2: #ff6b35;
+    --accent3: #4fffb0;
+    --text: #e8e8f0;
+    --muted: #666680;
+    --done: #4fffb0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  header {
+    padding: 60px 40px 40px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::after {
+    content: 'JS';
+    position: absolute;
+    right: -20px;
+    top: -30px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 280px;
+    color: var(--accent);
+    opacity: 0.04;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 8vw, 100px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    color: var(--text);
+  }
+
+  h1 span { color: var(--accent); }
+
+  .subtitle {
+    margin-top: 16px;
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 500px;
+    line-height: 1.6;
+  }
+
+  .progress-bar-wrap {
+    margin-top: 28px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .progress-track {
+    flex: 1;
+    max-width: 400px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  .progress-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+  }
+
+  /* Filter nav */
+  .filter-nav {
+    display: flex;
+    gap: 8px;
+    padding: 24px 40px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: rgba(10,10,15,0.95);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+
+  .filter-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(247,201,72,0.06);
+  }
+
+  /* Main layout */
+  .roadmap {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .phase {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+  }
+
+  .phase-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    color: var(--border);
+    line-height: 1;
+    flex-shrink: 0;
+    width: 80px;
+    text-align: right;
+    transition: color 0.3s;
+  }
+
+  .phase:hover .phase-number { color: var(--accent); }
+
+  .phase-content { flex: 1; }
+
+  .phase-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .phase-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+  }
+
+  .topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .topic-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+
+  .topic-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .topic-card.completed {
+    border-color: var(--done);
+    background: rgba(79,255,176,0.04);
+  }
+
+  .topic-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .topic-check {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .topic-card.completed .topic-check {
+    background: var(--done);
+    border-color: var(--done);
+  }
+
+  .topic-check-icon {
+    display: none;
+    color: #0a0a0f;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .topic-card.completed .topic-check-icon { display: block; }
+
+  .topic-name {
+    font-weight: 600;
+    font-size: 14px;
+    flex: 1;
+  }
+
+  .topic-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+
+  .badge-beginner { background: rgba(79,255,176,0.12); color: var(--accent3); }
+  .badge-intermediate { background: rgba(247,201,72,0.12); color: var(--accent); }
+  .badge-advanced { background: rgba(255,107,53,0.12); color: var(--accent2); }
+
+  /* Expandable content */
+  .topic-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+
+  .topic-card.open .topic-body {
+    max-height: 1000px;
+  }
+
+  .topic-inner { padding: 16px; }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 12px 0 8px;
+  }
+
+  .section-label:first-child { margin-top: 0; }
+
+  .concept-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .concept-list li {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    padding: 3px 0 3px 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .concept-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--border);
+  }
+
+  .practice-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .practice-list li {
+    font-size: 12px;
+    color: var(--muted);
+    padding: 6px 10px;
+    background: rgba(255,255,255,0.02);
+    border-left: 2px solid var(--accent);
+    line-height: 1.5;
+  }
+
+  /* Projects section */
+  .projects-section {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  .project-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(42,42,58,0.5);
+  }
+
+  .project-item:last-child { border-bottom: none; }
+
+  .project-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent2);
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+
+  .project-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .project-desc {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* Big projects section */
+  .big-projects {
+    padding: 40px;
+    border-top: 1px solid var(--border);
+  }
+
+  .big-projects-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    margin-bottom: 8px;
+  }
+
+  .big-projects-title span { color: var(--accent2); }
+
+  .big-projects-sub {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 32px;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .big-project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .big-project-card:hover { border-color: var(--accent2); }
+
+  .big-project-card::before {
+    content: attr(data-num);
+    position: absolute;
+    right: 16px;
+    top: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    color: var(--border);
+    line-height: 1;
+    transition: color 0.2s;
+  }
+
+  .big-project-card:hover::before { color: rgba(255,107,53,0.2); }
+
+  .bp-level {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .bp-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .bp-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .bp-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .bp-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    padding: 3px 7px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  footer {
+    padding: 32px 40px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: gap;
+  }
+
+  .footer-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 700px) {
+    header, .roadmap, .big-projects, .filter-nav, footer { padding: 24px 20px; }
+    .phase { flex-direction: column; gap: 8px; }
+    .phase-number { font-size: 40px; width: auto; text-align: left; }
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .phase { animation: fadeIn 0.5s ease both; }
+  .phase:nth-child(1) { animation-delay: 0.05s; }
+  .phase:nth-child(2) { animation-delay: 0.1s; }
+  .phase:nth-child(3) { animation-delay: 0.15s; }
+  .phase:nth-child(4) { animation-delay: 0.2s; }
+  .phase:nth-child(5) { animation-delay: 0.25s; }
+  .phase:nth-child(6) { animation-delay: 0.3s; }
+</style>
+</head>
+<body><nav style="position:sticky;top:0;z-index:9000;background:rgba(7,8,15,0.95);backdrop-filter:blur(16px);border-bottom:1px solid #1c2040;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:52px;font-family:'JetBrains Mono',monospace"><a href="index.html" style="color:#6c8eff;font-size:12px;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:8px;letter-spacing:1px;"><span style="background:linear-gradient(135deg,#6c8eff,#a855f7);width:24px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;color:white;font-weight:700">DM</span>DevMastery</a><div style="display:flex;gap:4px;overflow-x:auto"><a href="html-css.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap;transition:color 0.2s" onmouseover="this.style.color='#e34c26'" onmouseout="this.style.color='#4a5280'">HTML/CSS</a><a href="javascript.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap" onmouseover="this.style.color='#d4b800'" onmouseout="this.style.color='#4a5280'">JavaScript</a><a href="react.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap" onmouseover="this.style.color='#61dafb'" onmouseout="this.style.color='#4a5280'">React</a><a href="nodejs.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap" onmouseover="this.style.color='#68a063'" onmouseout="this.style.color='#4a5280'">Node.js</a><a href="sql.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap" onmouseover="this.style.color='#2d9e2d'" onmouseout="this.style.color='#4a5280'">SQL</a></div></nav>
+
+<header>
+  <span class="tag">// Complete Learning Path</span>
+  <h1>JavaScript<br><span>Mastery</span><br>Roadmap</h1>
+  <p class="subtitle">Every topic, practice question, and project you need to go from zero to professional JS developer.</p>
+  <div class="progress-bar-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="progress-text" id="progressText">0 / 0 completed</span>
+  </div>
+</header>
+
+<nav class="filter-nav">
+  <button class="filter-btn active" onclick="filterTopics('all')">All</button>
+  <button class="filter-btn" onclick="filterTopics('beginner')">Beginner</button>
+  <button class="filter-btn" onclick="filterTopics('intermediate')">Intermediate</button>
+  <button class="filter-btn" onclick="filterTopics('advanced')">Advanced</button>
+</nav>
+
+<div class="roadmap" id="roadmap"></div>
+
+<div class="big-projects">
+  <h2 class="big-projects-title">Build These <span>Projects</span></h2>
+  <p class="big-projects-sub">Real-world projects to cement your JavaScript skills at each level</p>
+  <div class="projects-grid" id="projectsGrid"></div>
+</div>
+
+<footer>
+  <span class="footer-text">// JavaScript Mastery Roadmap — Click any topic to expand</span>
+  <span class="footer-text" id="footerProgress"></span>
+</footer>
+
+<script>
+const roadmapData = [
+  {
+    phase: 1,
+    label: "Phase 01",
+    title: "The Foundations",
+    topics: [
+      {
+        name: "Variables & Data Types",
+        level: "beginner",
+        concepts: ["var, let, const", "Primitive types: string, number, boolean, null, undefined, symbol, bigint", "typeof operator", "Type coercion", "Mutable vs immutable values"],
+        practice: [
+          "Declare variables for your name, age, and isCoder — log them",
+          "Write a function that returns the type of any value passed",
+          "Convert '42' (string) to a number using 3 different methods",
+          "Find what typeof null returns and explain why"
+        ],
+        projects: [{ name: "Type Checker Console App", desc: "CLI tool that takes user input and returns type info" }]
+      },
+      {
+        name: "Operators & Expressions",
+        level: "beginner",
+        concepts: ["Arithmetic operators (+,-,*,/,%,**)", "Assignment operators", "Comparison (==, ===, !=, !==)", "Logical operators (&&, ||, !)", "Nullish coalescing (??)", "Optional chaining (?.)"],
+        practice: [
+          "Explain the difference between == and === with 3 examples",
+          "Use short-circuit evaluation to set a default value",
+          "Write a temperature converter (C to F and back)",
+          "Build a simple tip calculator"
+        ],
+        projects: [{ name: "Calculator App", desc: "Basic calculator with all operators and history log" }]
+      },
+      {
+        name: "Control Flow",
+        level: "beginner",
+        concepts: ["if / else if / else", "switch statements", "Ternary operator", "Truthy & falsy values", "Nullish coalescing in conditions"],
+        practice: [
+          "Write a grade classifier (A/B/C/D/F) using switch",
+          "FizzBuzz: print 1–100, 'Fizz' for 3, 'Buzz' for 5, 'FizzBuzz' for both",
+          "Build a simple login gate with if/else",
+          "Refactor a nested if/else into a switch"
+        ],
+        projects: [{ name: "Quiz Game", desc: "10-question quiz with score tracking and grade display" }]
+      },
+      {
+        name: "Loops",
+        level: "beginner",
+        concepts: ["for loop", "while loop", "do...while", "for...of", "for...in", "break and continue", "Nested loops"],
+        practice: [
+          "Print a multiplication table using nested loops",
+          "Sum all numbers 1–100 using a while loop",
+          "Find the first number divisible by both 7 and 11 under 200",
+          "Loop through an array and print only even-indexed items"
+        ],
+        projects: [{ name: "Number Patterns", desc: "Generate pyramid, diamond, and spiral patterns" }]
+      },
+      {
+        name: "Functions",
+        level: "beginner",
+        concepts: ["Function declarations vs expressions", "Arrow functions", "Parameters & arguments", "Default parameters", "Rest parameters", "Return values", "Scope (global, local, block)"],
+        practice: [
+          "Write a function that returns the factorial of a number",
+          "Create a function that accepts any number of arguments and returns their average",
+          "Rewrite a function declaration as an arrow function",
+          "Write a greeting function with a default name parameter"
+        ],
+        projects: [{ name: "Math Utilities Library", desc: "Collection of math helper functions with tests" }]
+      }
+    ]
+  },
+  {
+    phase: 2,
+    label: "Phase 02",
+    title: "Core Data Structures",
+    topics: [
+      {
+        name: "Arrays",
+        level: "beginner",
+        concepts: ["Creating & accessing arrays", "push, pop, shift, unshift", "splice, slice", "indexOf, includes, find, findIndex", "forEach, map, filter, reduce", "flat, flatMap", "sort, reverse", "Array destructuring", "Spread operator"],
+        practice: [
+          "Remove duplicates from an array without using Set",
+          "Flatten a nested array 2 levels deep without .flat()",
+          "Find the most frequent element in an array",
+          "Sort an array of objects by a specific property",
+          "Implement your own version of .map()"
+        ],
+        projects: [{ name: "Student Grade Manager", desc: "Track, sort, and filter student grades with array methods" }]
+      },
+      {
+        name: "Objects",
+        level: "beginner",
+        concepts: ["Object literals", "Dot & bracket notation", "Object methods", "this keyword", "Object destructuring", "Spread & rest in objects", "Object.keys/values/entries", "Property shorthand", "Computed properties"],
+        practice: [
+          "Deep clone an object without JSON.parse (handle nested objects)",
+          "Merge two objects — later keys override earlier ones",
+          "Write a function that inverts key/value pairs of an object",
+          "Count occurrences of words in a string using an object"
+        ],
+        projects: [{ name: "Contact Book", desc: "CRUD contact manager using array of objects" }]
+      },
+      {
+        name: "Strings",
+        level: "beginner",
+        concepts: ["Template literals", "String methods: slice, substring, indexOf, includes", "split, join, trim, padStart, padEnd", "replace, replaceAll", "toUpperCase, toLowerCase", "Regular expressions basics"],
+        practice: [
+          "Reverse a string without using .reverse()",
+          "Check if a string is a palindrome",
+          "Capitalize the first letter of every word",
+          "Count vowels in a string",
+          "Extract all hashtags from a tweet using regex"
+        ],
+        projects: [{ name: "Text Analyzer", desc: "Word count, sentence count, most frequent words" }]
+      },
+      {
+        name: "Sets & Maps",
+        level: "intermediate",
+        concepts: ["Set: add, delete, has, size", "Iterating Sets", "Map: set, get, delete, has", "Map vs Object differences", "WeakMap & WeakSet", "Converting between Set/Map/Array"],
+        practice: [
+          "Find unique values shared between two arrays using Set",
+          "Cache function results using Map (memoize)",
+          "Count character frequency using Map",
+          "Remove duplicates from array using Set then convert back"
+        ],
+        projects: [{ name: "Tag System", desc: "Blog-style tag manager using Sets with no duplicates" }]
+      }
+    ]
+  },
+  {
+    phase: 3,
+    label: "Phase 03",
+    title: "Advanced Functions",
+    topics: [
+      {
+        name: "Closures",
+        level: "intermediate",
+        concepts: ["Lexical scope", "Closure definition & use cases", "Private variables via closures", "IIFE (Immediately Invoked Function Expressions)", "The module pattern"],
+        practice: [
+          "Create a counter function using closure (increment, decrement, reset)",
+          "Build a function that remembers how many times it's been called",
+          "Write a once() function that can only run once",
+          "Implement a private bank account with deposit/withdraw using closure"
+        ],
+        projects: [{ name: "Shopping Cart Module", desc: "Cart with private state using closure-based module pattern" }]
+      },
+      {
+        name: "Higher-Order Functions",
+        level: "intermediate",
+        concepts: ["Functions as arguments", "Functions returning functions", "Currying", "Partial application", "Function composition", "Memoization"],
+        practice: [
+          "Implement curry() that converts a function to curried form",
+          "Write compose(f, g) that returns f(g(x))",
+          "Create a memoize() wrapper for any pure function",
+          "Build a retry() wrapper that retries a function N times on failure"
+        ],
+        projects: [{ name: "Pipeline Builder", desc: "Compose data transformations using function pipeline" }]
+      },
+      {
+        name: "this & Prototypes",
+        level: "intermediate",
+        concepts: ["this in different contexts", "call, apply, bind", "Prototype chain", "Object.create()", "Constructor functions", "new keyword behavior", "Prototype inheritance"],
+        practice: [
+          "Implement bind() from scratch",
+          "Explain what 'this' refers to in 5 different scenarios",
+          "Create a prototype-based inheritance chain for animals",
+          "Write a polyfill for Object.create()"
+        ],
+        projects: [{ name: "Shape Hierarchy", desc: "OOP shapes using prototype chain with area/perimeter" }]
+      },
+      {
+        name: "Classes & OOP",
+        level: "intermediate",
+        concepts: ["class syntax", "constructor", "Methods & properties", "Static methods", "Getters & setters", "extends & super", "Polymorphism", "Private fields (#)"],
+        practice: [
+          "Build a BankAccount class with deposit/withdraw/balance",
+          "Extend BankAccount into SavingsAccount with interest method",
+          "Create a class with private fields and getters",
+          "Implement a Stack class with push/pop/peek/isEmpty"
+        ],
+        projects: [{ name: "Library System", desc: "Book borrowing system using class-based OOP" }]
+      }
+    ]
+  },
+  {
+    phase: 4,
+    label: "Phase 04",
+    title: "Async JavaScript",
+    topics: [
+      {
+        name: "Callbacks",
+        level: "intermediate",
+        concepts: ["What is a callback", "Callback patterns", "Error-first callbacks", "Callback hell", "Why callbacks were replaced"],
+        practice: [
+          "Simulate an async delay using setTimeout + callback",
+          "Write a readFile simulation with error-first callback",
+          "Refactor callback hell into cleaner code",
+          "Build a simple event emitter with callbacks"
+        ],
+        projects: [{ name: "Event Queue Simulator", desc: "Simulate async operations with a callback queue" }]
+      },
+      {
+        name: "Promises",
+        level: "intermediate",
+        concepts: ["Promise states (pending/fulfilled/rejected)", ".then() and .catch()", ".finally()", "Promise.all()", "Promise.allSettled()", "Promise.race()", "Promise.any()", "Chaining promises"],
+        practice: [
+          "Wrap setTimeout in a Promise (delay function)",
+          "Fetch 3 URLs in parallel using Promise.all()",
+          "Build a retry mechanism using Promises",
+          "Create a timeout wrapper using Promise.race()"
+        ],
+        projects: [{ name: "Weather Dashboard", desc: "Fetch & display weather for multiple cities concurrently" }]
+      },
+      {
+        name: "Async/Await",
+        level: "intermediate",
+        concepts: ["async function syntax", "await keyword", "Error handling with try/catch", "Parallel vs sequential execution", "Async iteration (for await...of)", "Top-level await"],
+        practice: [
+          "Convert a Promise chain to async/await",
+          "Fetch user data then their posts sequentially",
+          "Fetch multiple resources in parallel with async/await",
+          "Handle multiple errors differently with nested try/catch"
+        ],
+        projects: [{ name: "GitHub Profile Viewer", desc: "Search GitHub users and show their repos using fetch + async/await" }]
+      },
+      {
+        name: "Event Loop",
+        level: "advanced",
+        concepts: ["Call stack", "Web APIs", "Callback queue (macrotask)", "Microtask queue", "Event loop order", "setTimeout vs Promise timing", "queueMicrotask"],
+        practice: [
+          "Predict the output order: setTimeout + Promise + sync code",
+          "Explain why console.log runs before setTimeout(fn, 0)",
+          "Write a function that yields to the UI thread",
+          "Trace a complex async flow through the event loop"
+        ],
+        projects: [{ name: "Task Scheduler", desc: "Priority-based async task queue with microtask awareness" }]
+      }
+    ]
+  },
+  {
+    phase: 5,
+    label: "Phase 05",
+    title: "The DOM & Browser",
+    topics: [
+      {
+        name: "DOM Manipulation",
+        level: "intermediate",
+        concepts: ["querySelector, querySelectorAll", "getElementById, getElementsByClassName", "createElement, appendChild, insertBefore", "innerHTML, textContent, innerText", "Attributes: getAttribute, setAttribute", "classList: add, remove, toggle, contains", "style property", "Traversal: parentElement, children, nextSibling"],
+        practice: [
+          "Build a dynamic list where you can add/remove items",
+          "Toggle a dark/light theme by modifying classList",
+          "Create a character counter for a textarea",
+          "Highlight all <p> tags on a page on button click"
+        ],
+        projects: [{ name: "Dynamic Todo List", desc: "Add, complete, delete, and filter todos using DOM" }]
+      },
+      {
+        name: "Events",
+        level: "intermediate",
+        concepts: ["addEventListener", "Event types (click, input, submit, keydown, etc.)", "Event object (target, type, key)", "Event bubbling & capturing", "stopPropagation, preventDefault", "Event delegation", "Custom events"],
+        practice: [
+          "Build a keylogger display using keydown events",
+          "Implement event delegation on a dynamic list",
+          "Create a drag-and-drop interface using mouse events",
+          "Fire and listen to a custom 'userLoggedIn' event"
+        ],
+        projects: [{ name: "Kanban Board", desc: "Drag-and-drop cards between columns using events" }]
+      },
+      {
+        name: "Fetch API & AJAX",
+        level: "intermediate",
+        concepts: ["fetch() basics", "GET & POST requests", "Request headers & options", "Response: .json(), .text(), .blob()", "Error handling with fetch", "XMLHttpRequest (legacy)", "CORS basics"],
+        practice: [
+          "Fetch and display data from JSONPlaceholder API",
+          "POST data to a mock API and handle the response",
+          "Add loading/error/success states to a fetch call",
+          "Build a search that fetches results as user types"
+        ],
+        projects: [{ name: "Movie Search App", desc: "Search movies from OMDB or TMDB API with infinite scroll" }]
+      },
+      {
+        name: "Local Storage & Web APIs",
+        level: "intermediate",
+        concepts: ["localStorage: setItem, getItem, removeItem, clear", "sessionStorage", "JSON.stringify & JSON.parse for storage", "Cookies basics", "History API (pushState, replaceState)", "Intersection Observer", "Geolocation API", "Clipboard API"],
+        practice: [
+          "Persist a todo list to localStorage",
+          "Build a dark mode toggle that persists across reloads",
+          "Implement infinite scroll using IntersectionObserver",
+          "Create a 'copy to clipboard' button"
+        ],
+        projects: [{ name: "Notes App", desc: "Rich notes with localStorage persistence and search" }]
+      }
+    ]
+  },
+  {
+    phase: 6,
+    label: "Phase 06",
+    title: "Modern JS & Tooling",
+    topics: [
+      {
+        name: "ES6+ Features",
+        level: "intermediate",
+        concepts: ["Destructuring (array & object)", "Spread & rest operators", "Template literals & tagged templates", "Optional chaining & nullish coalescing", "Logical assignment (&&=, ||=, ??=)", "Array/Object methods (Object.fromEntries, Array.from)", "Symbol", "Iterators & generators (function*)"],
+        practice: [
+          "Destructure nested objects and rename keys",
+          "Write a generator that yields Fibonacci numbers infinitely",
+          "Use optional chaining to safely access deeply nested data",
+          "Build an infinite sequence iterator"
+        ],
+        projects: [{ name: "Data Transformer", desc: "Chain ES6+ features to transform raw API data" }]
+      },
+      {
+        name: "Modules (ESM)",
+        level: "intermediate",
+        concepts: ["import / export syntax", "Default vs named exports", "Re-exporting", "Dynamic import()", "Module bundlers concept", "Tree shaking", "CommonJS vs ESM"],
+        practice: [
+          "Split a utility library into separate files and import them",
+          "Lazy-load a module on button click using dynamic import()",
+          "Create a module with both named and default exports",
+          "Build an index.js barrel file for a utils folder"
+        ],
+        projects: [{ name: "Modular Weather App", desc: "Weather app split into proper ES modules" }]
+      },
+      {
+        name: "Error Handling",
+        level: "intermediate",
+        concepts: ["try / catch / finally", "Error types (TypeError, ReferenceError, SyntaxError)", "Custom Error classes", "Rethrowing errors", "Global error handlers (window.onerror, unhandledrejection)", "Defensive programming"],
+        practice: [
+          "Build a fetchWithRetry that catches network errors",
+          "Create custom ValidationError and NetworkError classes",
+          "Add global error boundary logic to an app",
+          "Write a safe JSON parser that doesn't throw"
+        ],
+        projects: [{ name: "Robust Form Validator", desc: "Custom error classes with structured validation messages" }]
+      },
+      {
+        name: "Testing Basics",
+        level: "advanced",
+        concepts: ["Unit testing concepts", "Jest basics (describe, test, expect)", "Matchers (toBe, toEqual, toThrow)", "Mocking functions", "Test-Driven Development (TDD)", "Code coverage"],
+        practice: [
+          "Write tests for a pure math utility library",
+          "Test an async fetch function by mocking fetch",
+          "Practice TDD: write tests before a string utility function",
+          "Achieve 100% code coverage on a small module"
+        ],
+        projects: [{ name: "Tested Utility Library", desc: "String/array utils with 100% test coverage in Jest" }]
+      },
+      {
+        name: "Performance & Patterns",
+        level: "advanced",
+        concepts: ["Debounce & throttle", "Lazy loading", "Web Workers", "Design patterns: Module, Observer, Factory, Singleton, Strategy", "Memory management & garbage collection", "Performance profiling", "requestAnimationFrame"],
+        practice: [
+          "Implement debounce from scratch and apply to search input",
+          "Implement throttle and apply to a scroll handler",
+          "Build a pub/sub event system (Observer pattern)",
+          "Create a Factory function for different notification types"
+        ],
+        projects: [{ name: "Infinite Scroll + Search", desc: "Debounced search + throttled scroll + lazy image loading" }]
+      }
+    ]
+  }
+];
+
+const bigProjects = [
+  {
+    level: "beginner",
+    title: "Rock Paper Scissors",
+    desc: "Play against the computer with score tracking, win streaks, and game history log.",
+    tags: ["DOM", "Events", "Control Flow", "Arrays"]
+  },
+  {
+    level: "beginner",
+    title: "Digital Clock + Stopwatch",
+    desc: "Live clock with timezone support, stopwatch with lap times, and countdown timer.",
+    tags: ["setInterval", "Date API", "DOM", "Events"]
+  },
+  {
+    level: "intermediate",
+    title: "Expense Tracker",
+    desc: "Track income/expenses by category. Chart your spending. Persist data to localStorage.",
+    tags: ["Classes", "localStorage", "DOM", "Array Methods"]
+  },
+  {
+    level: "intermediate",
+    title: "Weather App",
+    desc: "Search any city for 5-day forecast. Use async/await, handle errors gracefully, show loading states.",
+    tags: ["Fetch API", "Async/Await", "DOM", "Promises"]
+  },
+  {
+    level: "intermediate",
+    title: "Custom Video Player",
+    desc: "HTML5 video player with custom controls, progress bar scrubbing, volume, speed control, and keyboard shortcuts.",
+    tags: ["DOM", "Events", "Video API", "CSS"]
+  },
+  {
+    level: "advanced",
+    title: "Real-Time Chat (WebSockets)",
+    desc: "Multi-user chat app with rooms, usernames, typing indicators using WebSockets.",
+    tags: ["WebSockets", "Events", "Async", "Modules"]
+  },
+  {
+    level: "advanced",
+    title: "JavaScript Interpreter",
+    desc: "Build a mini calculator language that parses and evaluates expressions like '(2 + 3) * 4'.",
+    tags: ["Recursion", "Parsing", "Algorithms", "Classes"]
+  },
+  {
+    level: "advanced",
+    title: "Trello-Style Kanban",
+    desc: "Drag-and-drop board with columns, cards, labels, due dates, and localStorage persistence.",
+    tags: ["Drag & Drop", "OOP", "localStorage", "Events", "DOM"]
+  },
+  {
+    level: "advanced",
+    title: "State Management Library",
+    desc: "Build a tiny Redux-like store with actions, reducers, subscribe, and dispatch.",
+    tags: ["Design Patterns", "Closures", "Observer", "Functional"]
+  }
+];
+
+function getLevelColor(level) {
+  if (level === 'beginner') return 'badge-beginner';
+  if (level === 'intermediate') return 'badge-intermediate';
+  return 'badge-advanced';
+}
+
+function getLevelText(level) {
+  const icons = { beginner: '◦', intermediate: '◈', advanced: '◉' };
+  return `${icons[level] || ''} ${level}`;
+}
+
+function toggleCard(card) {
+  card.classList.toggle('open');
+}
+
+function markDone(e, card) {
+  e.stopPropagation();
+  card.classList.toggle('completed');
+  updateProgress();
+}
+
+function updateProgress() {
+  const all = document.querySelectorAll('.topic-card');
+  const done = document.querySelectorAll('.topic-card.completed');
+  const pct = all.length ? (done.length / all.length * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `${done.length} / ${all.length} completed`;
+  document.getElementById('footerProgress').textContent = `${Math.round(pct)}% complete`;
+}
+
+function filterTopics(level) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.topic-card').forEach(card => {
+    if (level === 'all' || card.dataset.level === level) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+function renderRoadmap() {
+  const container = document.getElementById('roadmap');
+  container.innerHTML = roadmapData.map(phase => `
+    <div class="phase">
+      <div class="phase-number">${String(phase.phase).padStart(2,'0')}</div>
+      <div class="phase-content">
+        <div class="phase-label">${phase.label}</div>
+        <h2 class="phase-title">${phase.title}</h2>
+        <div class="topics-grid">
+          ${phase.topics.map(topic => `
+            <div class="topic-card" data-level="${topic.level}" onclick="toggleCard(this)">
+              <div class="topic-header">
+                <div class="topic-check" onclick="markDone(event, this.closest('.topic-card'))">
+                  <span class="topic-check-icon">✓</span>
+                </div>
+                <span class="topic-name">${topic.name}</span>
+                <span class="topic-badge ${getLevelColor(topic.level)}">${getLevelText(topic.level)}</span>
+              </div>
+              <div class="topic-body">
+                <div class="topic-inner">
+                  <div class="section-label">// Concepts to Learn</div>
+                  <ul class="concept-list">
+                    ${topic.concepts.map(c => `<li>${c}</li>`).join('')}
+                  </ul>
+                  <div class="section-label" style="margin-top:16px">// Practice Questions</div>
+                  <ul class="practice-list">
+                    ${topic.practice.map((p, i) => `<li><strong>${i+1}.</strong> ${p}</li>`).join('')}
+                  </ul>
+                  ${topic.projects ? `
+                    <div class="projects-section">
+                      <div class="section-label">// Mini Project</div>
+                      ${topic.projects.map(p => `
+                        <div class="project-item">
+                          <div class="project-dot"></div>
+                          <div>
+                            <div class="project-name">${p.name}</div>
+                            <div class="project-desc">${p.desc}</div>
+                          </div>
+                        </div>
+                      `).join('')}
+                    </div>
+                  ` : ''}
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderProjects() {
+  const grid = document.getElementById('projectsGrid');
+  const levelColors = { beginner: 'color: var(--accent3)', intermediate: 'color: var(--accent)', advanced: 'color: var(--accent2)' };
+  grid.innerHTML = bigProjects.map((p, i) => `
+    <div class="big-project-card" data-num="${String(i+1).padStart(2,'0')}">
+      <div class="bp-level" style="${levelColors[p.level]}">◉ ${p.level}</div>
+      <div class="bp-title">${p.title}</div>
+      <div class="bp-desc">${p.desc}</div>
+      <div class="bp-tags">
+        ${p.tags.map(t => `<span class="bp-tag">${t}</span>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+renderRoadmap();
+renderProjects();
+updateProgress();
+</script>
+</body>
+</html>

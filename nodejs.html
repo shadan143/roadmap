@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Node.js Mastery Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Barlow:wght@300;400;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0a06;
+  --bg2: #150f08;
+  --surface: #1c1409;
+  --card: #1a1208;
+  --border: #2d2010;
+  --border2: #3d2e18;
+  --node: #68a063;
+  --node-bright: #8dc585;
+  --node-dim: rgba(104,160,99,0.12);
+  --node-glow: rgba(104,160,99,0.35);
+  --amber: #f59e0b;
+  --amber-dim: rgba(245,158,11,0.12);
+  --orange: #ea580c;
+  --orange-dim: rgba(234,88,12,0.12);
+  --text: #d4c4a8;
+  --muted: #6a5840;
+  --done-bg: rgba(104,160,99,0.07);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Subtle noise texture */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* HEADER */
+header {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 2px solid var(--border2);
+}
+
+.header-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 320px;
+}
+
+.h-left {
+  padding: 52px 48px 40px;
+  border-right: 1px solid var(--border2);
+  position: relative;
+}
+
+/* Hexagon node.js logo feel */
+.node-icon {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--node);
+  letter-spacing: 3px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hex {
+  width: 28px;
+  height: 28px;
+  background: var(--node);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #0e0a06;
+}
+
+h1 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(56px, 8vw, 110px);
+  font-weight: 800;
+  line-height: 0.9;
+  color: var(--text);
+}
+
+h1 .node { color: var(--node-bright); }
+h1 .js { color: var(--amber); }
+
+.h-desc {
+  margin-top: 18px;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.8;
+  max-width: 400px;
+  font-weight: 300;
+}
+
+.h-right {
+  padding: 40px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--border2);
+  border: 1px solid var(--border2);
+}
+
+.stat-cell {
+  background: var(--surface);
+  padding: 20px 16px;
+  text-align: center;
+}
+
+.sc-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 44px;
+  font-weight: 800;
+  color: var(--node-bright);
+  display: block;
+  line-height: 1;
+}
+
+.sc-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 6px;
+  display: block;
+}
+
+.prog-area { margin-top: 28px; }
+
+.prog-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.prog-head strong { color: var(--node); }
+
+.prog-bar {
+  height: 3px;
+  background: var(--border2);
+}
+
+.prog-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--node), var(--amber));
+  transition: width 0.5s ease;
+  width: 0%;
+  box-shadow: 0 0 8px var(--node-glow);
+}
+
+/* FILTER */
+.filter-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  overflow-x: auto;
+  background: rgba(14,10,6,0.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border2);
+}
+
+.filter-btn {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  padding: 16px 22px;
+  border: none;
+  border-right: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.filter-btn:hover { color: var(--node); background: var(--node-dim); }
+.filter-btn.active { color: var(--node-bright); background: var(--node-dim); border-bottom: 2px solid var(--node); }
+
+/* ROADMAP */
+.phase {
+  border-bottom: 1px solid var(--border2);
+  animation: slideUp 0.4s ease both;
+}
+.phase:nth-child(1){animation-delay:.05s}
+.phase:nth-child(2){animation-delay:.1s}
+.phase:nth-child(3){animation-delay:.15s}
+.phase:nth-child(4){animation-delay:.2s}
+.phase:nth-child(5){animation-delay:.25s}
+.phase:nth-child(6){animation-delay:.3s}
+
+.phase-bar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+}
+
+.phase-id {
+  padding: 18px 22px;
+  border-right: 2px solid var(--node);
+  flex-shrink: 0;
+}
+
+.phase-id-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--node);
+  display: block;
+  line-height: 1;
+}
+
+.phase-id-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 7px;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.phase-name {
+  flex: 1;
+  padding: 18px 24px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.5px;
+}
+
+.phase-tag {
+  margin-right: 24px;
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid var(--node);
+  color: var(--node);
+  background: var(--node-dim);
+}
+
+/* Topics */
+.topics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+}
+
+.topic-card {
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+  cursor: pointer;
+  transition: background 0.15s;
+  position: relative;
+}
+
+.topic-card::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: transparent;
+  transition: background 0.2s;
+}
+
+.topic-card:hover::after { background: var(--node); }
+.topic-card:hover { background: var(--surface); }
+.topic-card.completed { background: var(--done-bg); }
+.topic-card.completed::after { background: var(--node-bright); }
+
+.topic-head {
+  display: flex;
+  align-items: stretch;
+}
+
+.topic-check {
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--border);
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  color: var(--border2);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.topic-check:hover { color: var(--node); background: var(--node-dim); }
+.topic-card.completed .topic-check { color: var(--node-bright); }
+
+.topic-info { flex: 1; padding: 14px 16px; }
+
+.topic-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #e8d8b8;
+  margin-bottom: 7px;
+  line-height: 1.3;
+}
+
+.badges { display: flex; gap: 5px; flex-wrap: wrap; }
+.badge {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 1px;
+  padding: 2px 7px;
+  border: 1px solid;
+  text-transform: uppercase;
+}
+
+.badge-beginner { border-color: rgba(104,160,99,0.4); color: var(--node); }
+.badge-intermediate { border-color: rgba(245,158,11,0.4); color: var(--amber); }
+.badge-advanced { border-color: rgba(234,88,12,0.4); color: var(--orange); }
+.badge-core { border-color: rgba(104,160,99,0.3); color: var(--node-bright); background: var(--node-dim); }
+.badge-api { border-color: rgba(245,158,11,0.3); color: var(--amber); background: var(--amber-dim); }
+.badge-security { border-color: rgba(234,88,12,0.3); color: var(--orange); background: var(--orange-dim); }
+
+.topic-arrow {
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  color: var(--muted);
+  font-size: 18px;
+  transition: transform 0.3s, color 0.2s;
+  flex-shrink: 0;
+}
+
+.topic-card.open .topic-arrow { transform: rotate(90deg); color: var(--node); }
+
+.topic-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+.topic-card.open .topic-body { max-height: 1400px; }
+
+.body-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--border);
+}
+
+.body-col {
+  padding: 18px;
+  border-right: 1px solid var(--border);
+}
+.body-col:last-child { border-right: none; }
+
+.col-title {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  color: var(--node);
+}
+
+.col-title.practice { color: var(--amber); border-bottom-color: rgba(245,158,11,0.2); }
+.col-title.project { color: var(--orange); border-bottom-color: rgba(234,88,12,0.2); }
+
+.concepts {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.concepts li {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.6;
+}
+
+.concepts li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--node);
+  font-size: 9px;
+}
+
+.practice-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.practice-list li {
+  font-size: 11px;
+  color: var(--muted);
+  padding: 8px 10px;
+  background: var(--amber-dim);
+  border-left: 2px solid var(--amber);
+  line-height: 1.5;
+}
+
+.practice-list li strong {
+  font-family: 'Space Mono', monospace;
+  color: var(--amber);
+  font-size: 8px;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.mp-box {
+  padding: 10px;
+  border: 1px solid var(--border2);
+  background: var(--node-dim);
+  margin-bottom: 8px;
+}
+
+.mp-box:last-child { margin-bottom: 0; }
+
+.mp-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--node-bright);
+  margin-bottom: 4px;
+}
+
+.mp-desc {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* Projects */
+.proj-section {
+  border-top: 2px solid var(--border2);
+}
+
+.proj-header {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border2);
+  padding: 52px 48px 44px;
+  position: relative;
+  overflow: hidden;
+}
+
+.proj-header::after {
+  content: 'BUILD';
+  position: absolute;
+  right: -20px;
+  bottom: -20px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 180px;
+  font-weight: 800;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--border2);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.proj-h-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(44px, 6vw, 76px);
+  font-weight: 800;
+  line-height: 0.95;
+  color: var(--text);
+}
+
+.proj-h-title .hi { color: var(--amber); }
+
+.proj-h-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 14px;
+}
+
+.proj-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.proj-card {
+  padding: 28px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+  position: relative;
+  transition: background 0.2s;
+}
+
+.proj-card:hover { background: var(--surface); }
+
+.proj-card-lvl {
+  height: 2px;
+  margin-bottom: 18px;
+}
+
+.proj-card[data-d="beginner"] .proj-card-lvl { background: var(--node); }
+.proj-card[data-d="intermediate"] .proj-card-lvl { background: var(--amber); }
+.proj-card[data-d="advanced"] .proj-card-lvl { background: var(--orange); }
+
+.proj-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 52px;
+  font-weight: 800;
+  color: var(--border2);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.proj-diff {
+  position: absolute;
+  top: 28px;
+  right: 28px;
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.proj-card[data-d="beginner"] .proj-diff { color: var(--node); }
+.proj-card[data-d="intermediate"] .proj-diff { color: var(--amber); }
+.proj-card[data-d="advanced"] .proj-diff { color: var(--orange); }
+
+.proj-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #e8d8b8;
+  margin-bottom: 8px;
+}
+
+.proj-desc {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 14px;
+}
+
+.proj-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.proj-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  padding: 2px 7px;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+footer {
+  background: var(--bg2);
+  border-top: 1px solid var(--border2);
+  padding: 20px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-logo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--node-bright);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-logo .hex-sm {
+  width: 20px;
+  height: 20px;
+  background: var(--node);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.footer-info {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .header-top { grid-template-columns: 1fr; }
+  .h-left { border-right: none; border-bottom: 1px solid var(--border2); }
+  header, footer, .proj-header { padding: 28px 20px; }
+  .body-grid { grid-template-columns: 1fr; }
+  .body-col { border-right: none; border-bottom: 1px solid var(--border); }
+}
+</style>
+</head>
+<body><nav style="position:sticky;top:0;z-index:9000;background:rgba(7,8,15,0.95);backdrop-filter:blur(16px);border-bottom:1px solid #1c2040;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:52px;font-family:'JetBrains Mono',monospace"><a href="index.html" style="color:#6c8eff;font-size:12px;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:8px;letter-spacing:1px;"><span style="background:linear-gradient(135deg,#6c8eff,#a855f7);width:24px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;color:white;font-weight:700">DM</span>DevMastery</a><div style="display:flex;gap:4px;overflow-x:auto"><a href="html-css.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap;transition:color 0.2s" onmouseover="this.style.color='#e34c26'" onmouseout="this.style.color='#4a5280'">HTML/CSS</a><a href="javascript.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap" onmouseover="this.style.color='#d4b800'" onmouseout="this.style.color='#4a5280'">JavaScript</a><a href="react.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap" onmouseover="this.style.color='#61dafb'" onmouseout="this.style.color='#4a5280'">React</a><a href="nodejs.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap" onmouseover="this.style.color='#68a063'" onmouseout="this.style.color='#4a5280'">Node.js</a><a href="sql.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap" onmouseover="this.style.color='#2d9e2d'" onmouseout="this.style.color='#4a5280'">SQL</a></div></nav>
+
+<header>
+  <div class="header-top">
+    <div class="h-left">
+      <div class="node-icon">
+        <div class="hex">N</div>
+        NODE.JS MASTERY ROADMAP // 2025
+      </div>
+      <h1><span class="node">Node</span><span class="js">.js</span><br>Mastery<br>Roadmap</h1>
+      <p class="h-desc">From JavaScript runtime fundamentals to production APIs. Build real backends, REST APIs, authentication, databases, and deploy to the cloud.</p>
+    </div>
+    <div class="h-right">
+      <div class="stats-grid">
+        <div class="stat-cell"><span class="sc-num" id="topicCount">—</span><span class="sc-label">Topics</span></div>
+        <div class="stat-cell"><span class="sc-num" id="practiceCount">—</span><span class="sc-label">Challenges</span></div>
+        <div class="stat-cell"><span class="sc-num">10</span><span class="sc-label">Projects</span></div>
+      </div>
+      <div class="prog-area">
+        <div class="prog-head"><span>Progress</span><strong id="progText">0 / 0</strong></div>
+        <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="filter-nav">
+  <button class="filter-btn active" onclick="filter('all',this)">All</button>
+  <button class="filter-btn" onclick="filter('beginner',this)">Beginner</button>
+  <button class="filter-btn" onclick="filter('intermediate',this)">Intermediate</button>
+  <button class="filter-btn" onclick="filter('advanced',this)">Advanced</button>
+</nav>
+
+<div id="roadmap"></div>
+
+<div class="proj-section">
+  <div class="proj-header">
+    <h2 class="proj-h-title">Ship These<br><span class="hi">Projects</span></h2>
+    <p class="proj-h-sub">// Real backends to put in your portfolio</p>
+  </div>
+  <div class="proj-grid" id="projGrid"></div>
+</div>
+
+<footer>
+  <div class="footer-logo"><div class="hex-sm"></div> NODE.JS MASTERY</div>
+  <span class="footer-info" id="footerInfo">Click topic to expand · Check off to track progress</span>
+</footer>
+
+<script>
+const data = [
+  {
+    id:"01", title:"Node.js Fundamentals", tag:"CORE",
+    topics:[
+      { name:"How Node.js Works", level:"beginner", badges:["beginner","core"],
+        concepts:["V8 engine and JavaScript runtime","Event loop: phases (timers, I/O, check, close)","Single-threaded non-blocking I/O","Libuv and the thread pool","process object: argv, env, exit, cwd","global object vs window","Modules: CommonJS (require/module.exports) vs ESM (import/export)","__dirname and __filename","How require() resolution works"],
+        practice:["Log all process.env variables and parse a custom one","Write a script that reads its own command-line arguments","Compare timing of synchronous vs async file read","Build a simple REPL loop using process.stdin and stdout"],
+        projects:[{name:"CLI Utility Tool",desc:"Command-line tool that accepts flags and arguments using process.argv"}]
+      },
+      { name:"Core Modules", level:"beginner", badges:["beginner","core"],
+        concepts:["fs: readFile, writeFile, appendFile, readdir, stat (sync and async versions)","fs.promises API","path: join, resolve, basename, dirname, extname","os: platform, cpus, totalmem, homedir","events: EventEmitter, on, emit, once, removeListener","url: URL class, searchParams","crypto: hash (SHA256), hmac, randomBytes, createCipheriv","util: promisify, inspect, format","stream: Readable, Writable, Transform, pipe"],
+        practice:["Build a directory size calculator using fs.promises","Create a file watcher that logs changes using fs.watch","Implement a password hasher using crypto.createHash","Convert a callback-based function to a Promise using util.promisify"],
+        projects:[{name:"File System CLI Manager",desc:"CLI tool: list, search, copy, delete files + show disk usage stats"}]
+      }
+    ]
+  },
+  {
+    id:"02", title:"Asynchronous Node.js", tag:"ASYNC",
+    topics:[
+      { name:"Async Patterns in Node", level:"beginner", badges:["beginner"],
+        concepts:["Callbacks and the Node error-first pattern","Callback hell and how to escape it","Promises and chaining","async/await with try/catch","Promise.all() and Promise.allSettled() for parallel tasks","util.promisify for legacy APIs","Async iterators","AbortController for cancellation","Worker threads for CPU-intensive tasks","child_process: exec, spawn, fork"],
+        practice:["Read multiple files in parallel with Promise.all","Implement a retry wrapper with exponential backoff","Use worker_threads to offload a CPU-heavy computation","Run a shell command from Node using child_process.exec"],
+        projects:[{name:"Parallel File Processor",desc:"Process 100 files concurrently using Promise.all with progress tracking"}]
+      },
+      { name:"Streams", level:"intermediate", badges:["intermediate"],
+        concepts:["Why streams exist (memory efficiency)","Readable streams: flowing vs paused mode","Writable streams","Transform streams","Duplex streams","pipe() and pipeline()","Backpressure and highWaterMark","Streaming HTTP responses","readline for line-by-line file processing","zlib for compression streams"],
+        practice:["Stream a large CSV file and count lines without loading it into memory","Create a Transform stream that converts text to uppercase","Build a file compression tool using zlib + pipe","Stream a large JSON file and parse it incrementally"],
+        projects:[{name:"Log File Analyzer",desc:"Stream-process gigabyte log files: parse, filter, aggregate, output CSV report"}]
+      }
+    ]
+  },
+  {
+    id:"03", title:"Building HTTP Servers", tag:"API",
+    topics:[
+      { name:"HTTP Module & Express Basics", level:"beginner", badges:["beginner","api"],
+        concepts:["http.createServer() from scratch","Request: method, url, headers, body","Response: writeHead, write, end","Express.js: app.listen, routing, middleware","express.json() and express.urlencoded()","Route parameters (:id) and query strings","express.static() for serving files","Middleware: next(), order matters","Router for modular routing","HTTP status codes (200, 201, 400, 401, 403, 404, 409, 500)"],
+        practice:["Build a raw HTTP server (no Express) that routes 3 endpoints","Create a REST API for a todo list with Express","Add middleware that logs every request (method, url, status, time)","Build a file server that streams files with proper Content-Type"],
+        projects:[{name:"REST API: Todo App",desc:"Full CRUD REST API with Express, in-memory storage, proper status codes"}]
+      },
+      { name:"REST API Best Practices", level:"intermediate", badges:["intermediate","api"],
+        concepts:["RESTful design principles","Resource naming conventions","Versioning (/api/v1/...)","Pagination: cursor vs offset","Sorting and filtering via query params","HATEOAS (concept)","Request validation with Joi or Zod","Error handling middleware","API documentation with Swagger/OpenAPI","Rate limiting with express-rate-limit","CORS: cors middleware configuration"],
+        practice:["Add request validation to all POST/PUT routes with Zod","Implement cursor-based pagination on a list endpoint","Set up Swagger UI docs for your API","Add CORS that only allows specific origins"],
+        projects:[{name:"Production-Ready REST API",desc:"Books/movies API with validation, pagination, versioning, docs, rate limiting"}]
+      }
+    ]
+  },
+  {
+    id:"04", title:"Databases & ORMs", tag:"DATA",
+    topics:[
+      { name:"PostgreSQL with Prisma", level:"intermediate", badges:["intermediate"],
+        concepts:["Prisma setup and schema.prisma","Data models and field types","Relations: one-to-many, many-to-many","Migrations with prisma migrate","CRUD operations with Prisma Client","Filtering, sorting, pagination","Transactions with prisma.$transaction","Raw SQL with prisma.$queryRaw","Seeding the database","Prisma Studio for DB browsing"],
+        practice:["Model a blog with users, posts, comments, and tags","Write a seed script that populates 100 users and 500 posts","Query posts with their author and comment count in one call","Run a transaction that creates an order and deducts inventory"],
+        projects:[{name:"Blog API with Prisma + PostgreSQL",desc:"Complete blog backend: auth, posts, comments, tags, likes — with Prisma"}]
+      },
+      { name:"MongoDB with Mongoose", level:"intermediate", badges:["intermediate"],
+        concepts:["MongoDB documents and collections","Mongoose schema and model","Schema types and validation","CRUD: create, find, findById, findOneAndUpdate, deleteOne","Query operators: $eq, $gt, $in, $and, $or","Aggregation pipeline: $match, $group, $project, $lookup","Virtuals and instance methods","Middleware: pre/post hooks","Population (joins in Mongo)","Indexes in Mongoose"],
+        practice:["Design a Mongoose schema for an e-commerce product catalog","Write an aggregation to get top 5 selling products","Add a pre-save hook that hashes a password field","Use $lookup to populate orders with product details"],
+        projects:[{name:"E-Commerce API with MongoDB",desc:"Products, orders, users — Mongoose schemas, aggregation, file uploads"}]
+      }
+    ]
+  },
+  {
+    id:"05", title:"Authentication & Security", tag:"AUTH",
+    topics:[
+      { name:"JWT Authentication", level:"intermediate", badges:["intermediate","security"],
+        concepts:["JWT structure: header.payload.signature","jsonwebtoken: sign, verify, decode","Access tokens vs refresh tokens","Storing tokens: httpOnly cookies vs localStorage","JWT expiry and rotation strategy","Middleware for protected routes","Password hashing with bcrypt","Registration and login flow","OAuth2 concepts","Passport.js strategy pattern"],
+        practice:["Build a full register/login/logout flow with JWT","Implement refresh token rotation with a Redis blacklist","Hash passwords with bcrypt and verify them on login","Protect routes with an auth middleware that validates JWT"],
+        projects:[{name:"Auth System (JWT + Refresh Tokens)",desc:"Complete auth: register, login, refresh, logout, profile — with httpOnly cookies"}]
+      },
+      { name:"Security Best Practices", level:"advanced", badges:["advanced","security"],
+        concepts:["Helmet.js for HTTP headers","SQL injection and parameterized queries","NoSQL injection prevention","XSS prevention","CSRF protection","Rate limiting and brute force protection","Input sanitization","Environment variables with dotenv","Secrets management (never commit keys)","HTTPS and TLS basics","Dependency vulnerability scanning (npm audit)"],
+        practice:["Audit a sample Express app and find 5 security issues","Add Helmet.js and inspect the headers it sets","Implement CSRF protection on form submission endpoint","Write a script that checks npm audit and fails on high severity"],
+        projects:[{name:"Security Hardened API",desc:"Take an existing API and add: Helmet, rate limiting, input validation, audit fixes"}]
+      }
+    ]
+  },
+  {
+    id:"06", title:"Advanced & Production", tag:"PROD",
+    topics:[
+      { name:"Testing Node.js Apps", level:"advanced", badges:["advanced"],
+        concepts:["Unit testing with Jest","Testing controllers with supertest","Mocking modules (jest.mock)","Test database setup and teardown","Integration tests","API contract testing","Coverage reports","Test-Driven Development flow","Snapshot testing","CI integration (GitHub Actions)"],
+        practice:["Write unit tests for a utility module","Test a REST API endpoint with supertest","Mock the database layer in controller tests","Set up GitHub Actions to run tests on every push"],
+        projects:[{name:"Fully Tested REST API",desc:"Node/Express API with 90%+ test coverage using Jest + Supertest"}]
+      },
+      { name:"Deployment & DevOps", level:"advanced", badges:["advanced"],
+        concepts:["PM2 for process management","Environment variables in production","Dockerizing a Node app (Dockerfile, .dockerignore)","Docker Compose for local dev (Node + Postgres)","Deploying to Railway, Render, or AWS EC2","Nginx as reverse proxy","SSL with Let's Encrypt","Logging with Winston and log rotation","Health check endpoint","Graceful shutdown handling","Monitoring with Prometheus basics"],
+        practice:["Write a Dockerfile for a Node/Express app","Set up docker-compose with Node + Postgres + Redis","Configure PM2 cluster mode for multiple CPU cores","Add a /health endpoint and configure uptime monitoring"],
+        projects:[{name:"Dockerized Production API",desc:"Node.js API containerized with Docker, Nginx, SSL, PM2, deployed to cloud"}]
+      },
+      { name:"WebSockets & Real-Time", level:"intermediate", badges:["intermediate"],
+        concepts:["WebSocket protocol vs HTTP","socket.io: server and client setup","Rooms and namespaces","Broadcasting events","Presence (online/offline users)","Redis adapter for horizontal scaling","Socket.io authentication","Polling fallback","Server-Sent Events (SSE)","When to use WebSockets vs SSE vs polling"],
+        practice:["Build a real-time chat server with rooms using socket.io","Broadcast typing indicators to all users in a room","Add authentication to WebSocket connections via JWT","Use Redis pub/sub to scale socket.io across multiple servers"],
+        projects:[{name:"Real-Time Chat App",desc:"Multi-room chat: join rooms, send messages, see who's online — socket.io + Redis"}]
+      }
+    ]
+  }
+];
+
+const projects = [
+  { d:"beginner", title:"CLI Note Taker", desc:"Command-line app to add, list, delete notes stored as JSON files. Uses process.argv, fs module.", tags:["fs module","CLI","JSON","Core Modules"] },
+  { d:"beginner", title:"Static File Server", desc:"HTTP server that serves any file from a directory. Handles MIME types, 404s, and directory listing.", tags:["http module","fs","Streams","MIME"] },
+  { d:"intermediate", title:"REST API: Bookstore", desc:"Full CRUD API for books with search, pagination, filtering. Validated with Zod, documented with Swagger.", tags:["Express","Zod","Pagination","Swagger"] },
+  { d:"intermediate", title:"URL Shortener", desc:"Shorten URLs, track click counts, redirect. Uses Redis for caching and PostgreSQL for persistence.", tags:["Express","Prisma","Redis","PostgreSQL"] },
+  { d:"intermediate", title:"JWT Auth System", desc:"Complete authentication: register, login, refresh tokens, logout, protected profile endpoint.", tags:["JWT","bcrypt","Cookies","Middleware"] },
+  { d:"intermediate", title:"Real-Time Chat", desc:"Multi-room WebSocket chat with typing indicators, presence, message history from DB.", tags:["socket.io","Redis","Express","MongoDB"] },
+  { d:"advanced", title:"E-Commerce API", desc:"Products, categories, users, orders, payments (Stripe webhook), admin panel. Full production setup.", tags:["Express","Prisma","Stripe","Docker"] },
+  { d:"advanced", title:"File Upload Service", desc:"Upload, store (S3), resize images, serve via CDN. Handles multipart forms, streams, signed URLs.", tags:["Multer","AWS S3","Streams","Sharp"] },
+  { d:"advanced", title:"GraphQL API", desc:"Replace a REST API with GraphQL: queries, mutations, subscriptions, DataLoader for N+1 fix.", tags:["GraphQL","Apollo Server","DataLoader","Auth"] },
+  { d:"advanced", title:"Microservices with Docker", desc:"Split a monolith into 3 services (auth, products, orders) communicating via RabbitMQ + API gateway.", tags:["Docker","RabbitMQ","Nginx","Microservices"] }
+];
+
+function toggle(card){ card.classList.toggle('open'); }
+function markDone(e,card){ e.stopPropagation(); card.classList.toggle('completed'); updateProg(); }
+function filter(val,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.topic-card').forEach(c=>{
+    c.style.display=(val==='all'||c.dataset.level===val)?'':'none';
+  });
+}
+function updateProg(){
+  const all=document.querySelectorAll('.topic-card'),done=document.querySelectorAll('.topic-card.completed');
+  const p=all.length?(done.length/all.length*100):0;
+  document.getElementById('progFill').style.width=p+'%';
+  document.getElementById('progText').textContent=`${done.length} / ${all.length}`;
+  document.getElementById('footerInfo').textContent=`${Math.round(p)}% complete`;
+}
+
+function render(){
+  let topics=0,practice=0;
+  document.getElementById('roadmap').innerHTML=data.map(phase=>`
+    <div class="phase">
+      <div class="phase-bar">
+        <div class="phase-id">
+          <span class="phase-id-num">${phase.id}</span>
+          <span class="phase-id-label">Phase</span>
+        </div>
+        <span class="phase-name">${phase.title}</span>
+        <span class="phase-tag">${phase.tag}</span>
+      </div>
+      <div class="topics-grid">
+        ${phase.topics.map(t=>{
+          topics++; practice+=t.practice.length;
+          return `
+          <div class="topic-card" data-level="${t.level}" onclick="toggle(this)">
+            <div class="topic-head">
+              <div class="topic-check" onclick="markDone(event,this.closest('.topic-card'))">✓</div>
+              <div class="topic-info">
+                <div class="topic-name">${t.name}</div>
+                <div class="badges">${t.badges.map(b=>`<span class="badge badge-${b}">${b}</span>`).join('')}</div>
+              </div>
+              <div class="topic-arrow">›</div>
+            </div>
+            <div class="topic-body">
+              <div class="body-grid">
+                <div class="body-col">
+                  <div class="col-title">→ Concepts</div>
+                  <ul class="concepts">${t.concepts.map(c=>`<li>${c}</li>`).join('')}</ul>
+                  ${t.projects?`
+                    <div style="margin-top:14px">
+                      <div class="col-title project">→ Mini Project</div>
+                      ${t.projects.map(p=>`<div class="mp-box"><div class="mp-name">${p.name}</div><div class="mp-desc">${p.desc}</div></div>`).join('')}
+                    </div>`:''}
+                </div>
+                <div class="body-col">
+                  <div class="col-title practice">→ Practice</div>
+                  <ul class="practice-list">${t.practice.map((p,i)=>`<li><strong>task_${i+1}:</strong>${p}</li>`).join('')}</ul>
+                </div>
+              </div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`).join('');
+  document.getElementById('topicCount').textContent=topics;
+  document.getElementById('practiceCount').textContent=practice;
+  updateProg();
+}
+
+function renderProjects(){
+  document.getElementById('projGrid').innerHTML=projects.map((p,i)=>`
+    <div class="proj-card" data-d="${p.d}">
+      <div class="proj-card-lvl"></div>
+      <div class="proj-diff">${p.d}</div>
+      <div class="proj-num">${String(i+1).padStart(2,'0')}</div>
+      <div class="proj-title">${p.title}</div>
+      <div class="proj-desc">${p.desc}</div>
+      <div class="proj-tags">${p.tags.map(t=>`<span class="proj-tag">${t}</span>`).join('')}</div>
+    </div>`).join('');
+}
+
+render(); renderProjects();
+</script>
+</body>
+</html>

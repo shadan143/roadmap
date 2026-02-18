@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>React.js Mastery Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #050810;
+  --bg2: #080d1a;
+  --surface: #0d1426;
+  --card: #0f1830;
+  --border: #1a2540;
+  --border2: #1e3060;
+  --react: #61dafb;
+  --react-dim: rgba(97,218,251,0.15);
+  --react-glow: rgba(97,218,251,0.4);
+  --pink: #ff2d78;
+  --pink-dim: rgba(255,45,120,0.15);
+  --green: #00ff9f;
+  --green-dim: rgba(0,255,159,0.12);
+  --yellow: #ffd700;
+  --text: #c8d8f0;
+  --muted: #4a6080;
+  --done-bg: rgba(0,255,159,0.06);
+  --done-border: #00ff9f;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Exo 2', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Animated grid bg */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(97,218,251,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(97,218,251,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at 20% 20%, rgba(97,218,251,0.04) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 80%, rgba(255,45,120,0.04) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+header {
+  position: relative;
+  z-index: 1;
+  padding: 56px 48px 48px;
+  border-bottom: 1px solid var(--border2);
+  background: linear-gradient(180deg, rgba(13,20,38,0.8) 0%, transparent 100%);
+  overflow: hidden;
+}
+
+.header-bg-text {
+  position: absolute;
+  right: -20px;
+  top: -10px;
+  font-family: 'Orbitron', monospace;
+  font-size: 180px;
+  font-weight: 900;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(97,218,251,0.07);
+  user-select: none;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.kicker {
+  font-family: 'Fira Code', monospace;
+  font-size: 11px;
+  color: var(--react);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.kicker::before {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: var(--react);
+}
+
+h1 {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(44px, 7vw, 88px);
+  font-weight: 900;
+  line-height: 0.95;
+  color: #fff;
+  text-shadow: 0 0 40px var(--react-glow);
+}
+
+h1 .react-text { color: var(--react); text-shadow: 0 0 30px var(--react-glow), 0 0 60px var(--react-glow); }
+
+.header-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  margin-top: 32px;
+  align-items: end;
+}
+
+.header-desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.8;
+  max-width: 480px;
+}
+
+.stats-panel {
+  display: flex;
+  gap: 24px;
+}
+
+.stat-box {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  padding: 16px 20px;
+  text-align: center;
+  min-width: 80px;
+}
+
+.stat-num {
+  font-family: 'Orbitron', monospace;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--react);
+  display: block;
+  line-height: 1;
+}
+
+.stat-label {
+  font-family: 'Fira Code', monospace;
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 6px;
+  display: block;
+}
+
+.progress-row {
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.prog-bar {
+  flex: 1;
+  max-width: 480px;
+  height: 2px;
+  background: var(--border2);
+  position: relative;
+}
+
+.prog-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--react), var(--pink));
+  box-shadow: 0 0 8px var(--react-glow);
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+.prog-text {
+  font-family: 'Fira Code', monospace;
+  font-size: 12px;
+  color: var(--react);
+}
+
+/* Filter nav */
+.filter-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  gap: 0;
+  padding: 0;
+  background: rgba(5,8,16,0.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border2);
+  overflow-x: auto;
+}
+
+.filter-btn {
+  font-family: 'Fira Code', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 16px 22px;
+  border: none;
+  border-right: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.filter-btn:hover { color: var(--react); background: var(--react-dim); }
+.filter-btn.active { color: var(--react); background: var(--react-dim); border-bottom: 2px solid var(--react); }
+
+/* Roadmap */
+.roadmap { position: relative; z-index: 1; }
+
+.phase {
+  border-bottom: 1px solid var(--border2);
+  animation: slideIn 0.5s ease both;
+}
+.phase:nth-child(1){animation-delay:.05s}
+.phase:nth-child(2){animation-delay:.1s}
+.phase:nth-child(3){animation-delay:.15s}
+.phase:nth-child(4){animation-delay:.2s}
+.phase:nth-child(5){animation-delay:.25s}
+.phase:nth-child(6){animation-delay:.3s}
+
+.phase-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 24px 32px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+}
+
+.phase-num {
+  font-family: 'Orbitron', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--react);
+  letter-spacing: 3px;
+  padding: 5px 12px;
+  border: 1px solid var(--react);
+  box-shadow: 0 0 10px var(--react-dim);
+}
+
+.phase-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.phase-count {
+  font-family: 'Fira Code', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  margin-left: auto;
+  letter-spacing: 1px;
+}
+
+.topics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 0;
+}
+
+.topic-card {
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+  cursor: pointer;
+  transition: background 0.2s;
+  position: relative;
+}
+
+.topic-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: transparent;
+  transition: background 0.2s;
+}
+
+.topic-card:hover { background: var(--surface); }
+.topic-card:hover::before { background: var(--react); box-shadow: 0 0 8px var(--react-glow); }
+.topic-card.completed { background: var(--done-bg); }
+.topic-card.completed::before { background: var(--green); }
+
+.topic-head {
+  display: flex;
+  align-items: stretch;
+  padding: 0;
+}
+
+.topic-check {
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--border);
+  font-family: 'Fira Code', monospace;
+  font-size: 14px;
+  color: var(--border2);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.topic-check:hover { color: var(--green); background: var(--green-dim); }
+.topic-card.completed .topic-check { color: var(--green); text-shadow: 0 0 8px var(--green); }
+
+.topic-info {
+  flex: 1;
+  padding: 14px 16px;
+}
+
+.topic-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e0ecff;
+  margin-bottom: 7px;
+  line-height: 1.3;
+}
+
+.badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  font-family: 'Fira Code', monospace;
+  font-size: 8px;
+  letter-spacing: 1px;
+  padding: 2px 8px;
+  border: 1px solid;
+  text-transform: uppercase;
+}
+
+.badge-beginner { border-color: #00ff9f44; color: var(--green); }
+.badge-intermediate { border-color: #ffd70044; color: var(--yellow); }
+.badge-advanced { border-color: #ff2d7844; color: var(--pink); }
+.badge-hooks { border-color: #61dafb44; color: var(--react); }
+.badge-state { border-color: #a855f755; color: #c084fc; }
+.badge-perf { border-color: #ff6b3555; color: #ff8c5a; }
+
+.topic-arrow {
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  color: var(--muted);
+  font-size: 16px;
+  transition: transform 0.3s, color 0.2s;
+}
+
+.topic-card.open .topic-arrow { transform: rotate(90deg); color: var(--react); }
+
+.topic-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+.topic-card.open .topic-body { max-height: 1200px; }
+
+.body-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--border);
+}
+
+.body-col {
+  padding: 18px;
+  border-right: 1px solid var(--border);
+}
+.body-col:last-child { border-right: none; }
+
+.col-title {
+  font-family: 'Fira Code', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.col-title.react { color: var(--react); border-bottom-color: rgba(97,218,251,0.2); }
+.col-title.practice { color: var(--pink); border-bottom-color: rgba(255,45,120,0.2); }
+.col-title.project { color: var(--green); border-bottom-color: rgba(0,255,159,0.2); }
+
+.concepts {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.concepts li {
+  font-family: 'Fira Code', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.concepts li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--react);
+  font-size: 9px;
+}
+
+.practice-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.practice-list li {
+  font-size: 11px;
+  color: var(--muted);
+  padding: 7px 10px;
+  background: var(--pink-dim);
+  border-left: 2px solid var(--pink);
+  line-height: 1.5;
+}
+
+.practice-list li strong {
+  font-family: 'Fira Code', monospace;
+  color: var(--pink);
+  font-size: 9px;
+  margin-right: 6px;
+}
+
+.mini-project {
+  padding: 10px;
+  border: 1px solid var(--border2);
+  background: rgba(0,255,159,0.04);
+  margin-top: 8px;
+}
+
+.mini-project:first-child { margin-top: 0; }
+
+.mp-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--green);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mp-title::before { content: '⬡'; font-size: 10px; }
+
+.mp-desc {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* Projects section */
+.projects-section {
+  position: relative;
+  z-index: 1;
+  border-top: 2px solid var(--border2);
+}
+
+.projects-header {
+  padding: 48px 48px 32px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border2);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+
+.ph-title {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(32px, 4vw, 56px);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+}
+
+.ph-title span { color: var(--react); text-shadow: 0 0 20px var(--react-glow); }
+
+.ph-sub {
+  font-family: 'Fira Code', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 10px;
+}
+
+.ph-num {
+  font-family: 'Orbitron', monospace;
+  font-size: 80px;
+  font-weight: 900;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--border2);
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.project-card {
+  padding: 28px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.2s;
+}
+
+.project-card:hover { background: var(--surface); }
+
+.project-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  transition: box-shadow 0.2s;
+}
+
+.project-card[data-level="beginner"]::after { background: var(--green); }
+.project-card[data-level="intermediate"]::after { background: var(--yellow); }
+.project-card[data-level="advanced"]::after { background: var(--pink); }
+
+.project-card:hover::after { box-shadow: 0 0 12px currentColor; }
+
+.pc-num {
+  font-family: 'Orbitron', monospace;
+  font-size: 48px;
+  font-weight: 900;
+  color: var(--border2);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.pc-level {
+  font-family: 'Fira Code', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  position: absolute;
+  top: 28px;
+  right: 28px;
+}
+
+.pc-level.beginner { color: var(--green); }
+.pc-level.intermediate { color: var(--yellow); }
+.pc-level.advanced { color: var(--pink); }
+
+.pc-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #e0ecff;
+  margin-bottom: 8px;
+}
+
+.pc-desc {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 14px;
+}
+
+.pc-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.pc-tag {
+  font-family: 'Fira Code', monospace;
+  font-size: 8px;
+  padding: 2px 7px;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+footer {
+  position: relative;
+  z-index: 1;
+  background: var(--bg2);
+  border-top: 1px solid var(--border2);
+  padding: 20px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-brand {
+  font-family: 'Orbitron', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--react);
+  text-shadow: 0 0 10px var(--react-glow);
+}
+
+.footer-info {
+  font-family: 'Fira Code', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@media (max-width: 700px) {
+  header, footer, .projects-header { padding: 28px 20px; }
+  .header-grid { grid-template-columns: 1fr; }
+  .stats-panel { flex-wrap: wrap; }
+  .body-inner { grid-template-columns: 1fr; }
+  .body-col { border-right: none; border-bottom: 1px solid var(--border); }
+  .projects-header { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body><nav style="position:sticky;top:0;z-index:9000;background:rgba(7,8,15,0.95);backdrop-filter:blur(16px);border-bottom:1px solid #1c2040;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:52px;font-family:'JetBrains Mono',monospace"><a href="index.html" style="color:#6c8eff;font-size:12px;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:8px;letter-spacing:1px;"><span style="background:linear-gradient(135deg,#6c8eff,#a855f7);width:24px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;color:white;font-weight:700">DM</span>DevMastery</a><div style="display:flex;gap:4px;overflow-x:auto"><a href="html-css.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap;transition:color 0.2s" onmouseover="this.style.color='#e34c26'" onmouseout="this.style.color='#4a5280'">HTML/CSS</a><a href="javascript.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap" onmouseover="this.style.color='#d4b800'" onmouseout="this.style.color='#4a5280'">JavaScript</a><a href="react.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap" onmouseover="this.style.color='#61dafb'" onmouseout="this.style.color='#4a5280'">React</a><a href="nodejs.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap" onmouseover="this.style.color='#68a063'" onmouseout="this.style.color='#4a5280'">Node.js</a><a href="sql.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap" onmouseover="this.style.color='#2d9e2d'" onmouseout="this.style.color='#4a5280'">SQL</a></div></nav>
+<header>
+  <div class="header-bg-text">REACT</div>
+  <div class="kicker">// Complete Learning Path · 2025</div>
+  <h1><span class="react-text">React</span><br>Mastery<br>Roadmap</h1>
+  <div class="header-grid">
+    <p class="header-desc">From JSX to production-grade applications. Every hook, pattern, and concept you need to build real React apps — with practice challenges and projects at every step.</p>
+    <div class="stats-panel">
+      <div class="stat-box"><span class="stat-num" id="topicCount">—</span><span class="stat-label">Topics</span></div>
+      <div class="stat-box"><span class="stat-num" id="practiceCount">—</span><span class="stat-label">Challenges</span></div>
+      <div class="stat-box"><span class="stat-num">10</span><span class="stat-label">Projects</span></div>
+    </div>
+  </div>
+  <div class="progress-row">
+    <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+    <span class="prog-text" id="progText">0 / 0 completed</span>
+  </div>
+</header>
+
+<nav class="filter-nav">
+  <button class="filter-btn active" onclick="filter('all',this)">All</button>
+  <button class="filter-btn" onclick="filter('beginner',this)">Beginner</button>
+  <button class="filter-btn" onclick="filter('intermediate',this)">Intermediate</button>
+  <button class="filter-btn" onclick="filter('advanced',this)">Advanced</button>
+</nav>
+
+<div class="roadmap" id="roadmap"></div>
+
+<div class="projects-section">
+  <div class="projects-header">
+    <div>
+      <h2 class="ph-title">Build These<br><span>Projects</span></h2>
+      <p class="ph-sub">// Real apps to prove your React skills</p>
+    </div>
+    <div class="ph-num">10</div>
+  </div>
+  <div class="projects-grid" id="projectsGrid"></div>
+</div>
+
+<footer>
+  <div class="footer-brand">⬡ REACT.JS MASTERY</div>
+  <span class="footer-info" id="footerInfo">Click topic to expand · Checkmark to track progress</span>
+</footer>
+
+<script>
+const data = [
+  {
+    id:"01", title:"JSX & Components",
+    topics:[
+      { name:"JSX Syntax & Rules", level:"beginner", badges:["beginner"],
+        concepts:["JSX is not HTML — it compiles to React.createElement()","className vs class, htmlFor vs for","Self-closing tags requirement","Expressions in JSX with {}","Fragments: <> </> and <React.Fragment>","Conditional rendering: &&, ternary, if","Rendering lists with .map() and key prop","JSX must return single root element"],
+        practice:["Write JSX that conditionally shows a badge if a user is admin","Render a list of products from an array with unique keys","Convert a plain HTML card to a JSX component","Debug: fix 3 common JSX errors (missing key, wrong attribute name, multiple roots)"],
+        projects:[{name:"Product Card Component",desc:"JSX card with image, title, price, badge, and conditional sold-out overlay"}]
+      },
+      { name:"Functional Components & Props", level:"beginner", badges:["beginner"],
+        concepts:["Creating functional components","Props: passing, receiving, destructuring","PropTypes for type checking","defaultProps","Children prop","Passing functions as props","Prop drilling basics","Component composition patterns"],
+        practice:["Build a Button component that accepts variant, size, and onClick props","Create a Card component that renders any children passed to it","Pass a callback from parent to child and trigger it","Build a reusable Avatar component with fallback initials"],
+        projects:[{name:"Component Library Starter",desc:"Button, Input, Card, Avatar, Badge — all with props and PropTypes"}]
+      }
+    ]
+  },
+  {
+    id:"02", title:"Core Hooks",
+    topics:[
+      { name:"useState & useReducer", level:"beginner", badges:["beginner","hooks"],
+        concepts:["useState basics: initial value, setter","Functional updates (prev => prev + 1)","State with objects and arrays","Immutability — never mutate state directly","Multiple state variables vs single object","useReducer for complex state","Reducer pattern: action, state, dispatch","When to use useState vs useReducer"],
+        practice:["Build a counter with increment, decrement, reset","Create a form with multiple fields using a single object state","Implement a shopping cart with useReducer (add, remove, update qty)","Build a color mixer that updates hex preview in real time"],
+        projects:[{name:"Shopping Cart with useReducer",desc:"Full cart: add/remove items, update quantities, total calculation"}]
+      },
+      { name:"useEffect & Lifecycle", level:"intermediate", badges:["intermediate","hooks"],
+        concepts:["useEffect syntax and dependency array","Effect on mount (empty dep array)","Effect on every render (no dep array)","Effect on specific value change","Cleanup functions (return from effect)","Avoiding infinite loops","Fetching data with useEffect","Race conditions and AbortController"],
+        practice:["Fetch users from an API on component mount","Subscribe to a websocket and clean up on unmount","Debounce a search input effect","Fix a stale closure bug in a useEffect"],
+        projects:[{name:"Live Search with Debounce",desc:"Search bar that fetches results from API with debounce and loading/error states"}]
+      },
+      { name:"useRef, useMemo & useCallback", level:"intermediate", badges:["intermediate","hooks","perf"],
+        concepts:["useRef for DOM access","useRef for mutable values (no re-render)","Accessing input values with ref","useMemo to memoize expensive calculations","useCallback to memoize functions","Dependency arrays for memoization","When NOT to use useMemo/useCallback","React.memo for component memoization"],
+        practice:["Auto-focus an input on mount using useRef","Memoize a slow filtering function with useMemo","Prevent unnecessary re-renders with React.memo + useCallback","Build a stopwatch using useRef for the interval ID"],
+        projects:[{name:"Performance-Optimized List",desc:"Large sortable/filterable list with memoization — measure before/after with profiler"}]
+      },
+      { name:"Custom Hooks", level:"intermediate", badges:["intermediate","hooks"],
+        concepts:["What makes a custom hook","Naming convention (use prefix)","Extracting stateful logic","useFetch hook","useLocalStorage hook","useDebounce hook","useWindowSize hook","useOnClickOutside hook","Sharing logic between components"],
+        practice:["Build useFetch(url) that returns { data, loading, error }","Create useLocalStorage(key, initialValue)","Write useDebounce(value, delay)","Build useToggle() as a reusable boolean state helper"],
+        projects:[{name:"Custom Hooks Library",desc:"6 production-quality custom hooks with demos and documentation"}]
+      }
+    ]
+  },
+  {
+    id:"03", title:"Advanced Patterns",
+    topics:[
+      { name:"Context API", level:"intermediate", badges:["intermediate","state"],
+        concepts:["createContext()","Provider and Consumer","useContext hook","Context for theming","Context for auth state","Avoiding unnecessary re-renders with context","Multiple contexts","Context vs prop drilling vs state managers","Splitting context for performance"],
+        practice:["Build a ThemeContext that switches dark/light mode globally","Create an AuthContext with login/logout and user state","Use multiple contexts in a single component","Optimize context to prevent unnecessary re-renders"],
+        projects:[{name:"Theme + Auth App",desc:"App with global theme switching and authentication state via Context"}]
+      },
+      { name:"React Router v6", level:"intermediate", badges:["intermediate"],
+        concepts:["BrowserRouter, Routes, Route","Link and NavLink","useNavigate hook","useParams hook","useLocation hook","Nested routes with Outlet","Protected routes pattern","Lazy loading routes with React.lazy","404 catch-all route","URL search params"],
+        practice:["Set up nested routes for a blog (/blog, /blog/:id)","Build a protected route that redirects to login if not authenticated","Pass and read URL search params (?sort=asc)","Lazy-load a heavy component/route"],
+        projects:[{name:"Multi-Page Blog App",desc:"Blog with listing, detail, about, and protected admin pages using React Router v6"}]
+      },
+      { name:"Component Patterns", level:"advanced", badges:["advanced"],
+        concepts:["Compound components","Render props pattern","Higher-Order Components (HOCs)","Controlled vs uncontrolled components","Portals (ReactDOM.createPortal)","Error boundaries","Forwarding refs (React.forwardRef)","Slots pattern with children","Headless components"],
+        practice:["Build a compound Tabs component (Tabs, Tab, TabPanel)","Create a Modal using a Portal","Implement an Error Boundary that shows a fallback UI","Write a withAuth HOC that wraps protected components"],
+        projects:[{name:"Headless UI Kit",desc:"Modal, Dropdown, Tabs — accessible, compound component APIs, zero styling"}]
+      }
+    ]
+  },
+  {
+    id:"04", title:"State Management",
+    topics:[
+      { name:"Zustand", level:"intermediate", badges:["intermediate","state"],
+        concepts:["Creating a store with create()","Accessing state with useStore","Updating state in actions","Async actions in Zustand","Slices pattern for large stores","Persisting state with persist middleware","Devtools middleware","Comparing Zustand vs Context vs Redux"],
+        practice:["Build a counter store with Zustand","Create a cart store with add/remove/clear actions","Add persist middleware to save cart to localStorage","Split a large store into slices"],
+        projects:[{name:"E-Commerce Cart (Zustand)",desc:"Product listing + cart with persistent state using Zustand"}]
+      },
+      { name:"React Query / TanStack Query", level:"intermediate", badges:["intermediate"],
+        concepts:["QueryClient and QueryClientProvider","useQuery for data fetching","useMutation for data changes","Caching and stale time","Background refetching","Pagination with useInfiniteQuery","Optimistic updates","Query invalidation","Error and loading states","Dependent queries"],
+        practice:["Fetch and cache a list of posts with useQuery","Create a form that uses useMutation to POST data","Implement infinite scroll with useInfiniteQuery","Invalidate and refetch a query after a mutation"],
+        projects:[{name:"Full CRUD App with TanStack Query",desc:"Posts app with create/read/update/delete, caching, and optimistic updates"}]
+      }
+    ]
+  },
+  {
+    id:"05", title:"Forms & Data",
+    topics:[
+      { name:"React Hook Form", level:"intermediate", badges:["intermediate"],
+        concepts:["useForm hook","register function","handleSubmit","formState (errors, isDirty, isSubmitting)","watch and setValue","Validation rules (required, minLength, pattern)","Zod/Yup schema validation","useFieldArray for dynamic fields","Controller for controlled components"],
+        practice:["Build a login form with validation (required, email format, min password)","Add Zod schema to a registration form","Create a dynamic form where user can add/remove fields","Build a multi-step form wizard with React Hook Form"],
+        projects:[{name:"Multi-Step Registration Wizard",desc:"3-step form with validation, dynamic fields, and success summary screen"}]
+      }
+    ]
+  },
+  {
+    id:"06", title:"Performance & Deployment",
+    topics:[
+      { name:"Performance Optimization", level:"advanced", badges:["advanced","perf"],
+        concepts:["React DevTools Profiler","Code splitting with React.lazy + Suspense","Dynamic imports","Virtualization (react-window, react-virtual)","Image optimization","Bundle analysis","Avoiding re-renders (key understanding)","Concurrent features (useTransition, useDeferredValue)","Streaming SSR"],
+        practice:["Profile a slow list and fix unnecessary renders","Implement virtual scrolling for 10,000 items","Add Suspense boundaries with loading fallbacks","Use useTransition to keep UI responsive during heavy updates"],
+        projects:[{name:"High-Performance Data Table",desc:"100k row virtual table with sorting, filtering, and React profiler report"}]
+      },
+      { name:"Testing React Apps", level:"advanced", badges:["advanced"],
+        concepts:["React Testing Library philosophy","render() and screen queries","user-event for interactions","Mocking fetch/API calls","Testing hooks with renderHook","Snapshot testing","Integration vs unit tests","Testing async behavior","MSW (Mock Service Worker)"],
+        practice:["Write tests for a Button component (renders, handles clicks)","Test a form submission with user interactions","Mock an API call and test loading/error/success states","Test a custom hook with renderHook"],
+        projects:[{name:"Fully Tested Feature",desc:"A complete React feature (form + list + API) with 90%+ test coverage"}]
+      },
+      { name:"Next.js Fundamentals", level:"advanced", badges:["advanced"],
+        concepts:["App Router vs Pages Router","Server vs Client Components","File-based routing","Server Actions","Data fetching: fetch with caching","Static vs Dynamic rendering","generateStaticParams","Metadata API","Image and Font optimization","Deployment to Vercel"],
+        practice:["Build a blog with static generation using generateStaticParams","Create a server action that handles form submission","Add metadata to pages for SEO","Deploy a Next.js app to Vercel with environment variables"],
+        projects:[{name:"Full-Stack Next.js Blog",desc:"MDX blog with SSG, dynamic routes, dark mode, and RSS feed"}]
+      }
+    ]
+  }
+];
+
+const projects = [
+  { level:"beginner", title:"Counter App", desc:"Multi-counter app with increment/decrement/reset using useState. Style each counter independently.", tags:["useState","JSX","Props"] },
+  { level:"beginner", title:"Markdown Previewer", desc:"Textarea on left, live-rendered markdown on right. Split view with syntax highlighting.", tags:["useState","useEffect","Libraries"] },
+  { level:"beginner", title:"Movie Search", desc:"Search the OMDB API as you type. Show poster, rating, and details. Handle loading and empty states.", tags:["useEffect","Fetch","Conditional Render"] },
+  { level:"intermediate", title:"Kanban Board", desc:"Drag-and-drop board with columns, cards, labels, and localStorage persistence. Full CRUD on cards.", tags:["useReducer","Context","DnD","localStorage"] },
+  { level:"intermediate", title:"Auth App (JWT)", desc:"Login/register flow with JWT stored in httpOnly cookie, protected routes, and persistent session.", tags:["React Router","Context","Fetch","Forms"] },
+  { level:"intermediate", title:"Real-Time Chat UI", desc:"Chat interface with rooms, messages, typing indicators. Connect to a WebSocket backend.", tags:["useEffect","useState","WebSockets","Custom Hooks"] },
+  { level:"intermediate", title:"E-Commerce Store", desc:"Product listing with filters/search, cart with Zustand, checkout flow, and order confirmation.", tags:["Zustand","React Router","React Query","Forms"] },
+  { level:"advanced", title:"GitHub Dashboard Clone", desc:"Fetch user repos, contributions, and stats. Interactive charts. Infinite scroll on repos list.", tags:["React Query","Charts","Infinite Scroll","Virtualization"] },
+  { level:"advanced", title:"Full-Stack Next.js App", desc:"Next.js app with App Router, Server Actions, Prisma ORM, authentication, and Vercel deployment.", tags:["Next.js","Server Actions","Prisma","Auth"] },
+  { level:"advanced", title:"Design System", desc:"Component library with Storybook docs, theming, accessibility (ARIA), and 100% test coverage.", tags:["Testing","Storybook","Context","Patterns"] }
+];
+
+function toggle(card){ card.classList.toggle('open'); }
+function markDone(e,card){ e.stopPropagation(); card.classList.toggle('completed'); updateProg(); }
+function filter(val,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.topic-card').forEach(c=>{
+    c.style.display=(val==='all'||c.dataset.level===val)?'':'none';
+  });
+}
+function updateProg(){
+  const all=document.querySelectorAll('.topic-card'),done=document.querySelectorAll('.topic-card.completed');
+  const p=all.length?(done.length/all.length*100):0;
+  document.getElementById('progFill').style.width=p+'%';
+  document.getElementById('progText').textContent=`${done.length} / ${all.length} completed`;
+  document.getElementById('footerInfo').textContent=`${Math.round(p)}% complete`;
+}
+
+function render(){
+  let topics=0,practice=0;
+  document.getElementById('roadmap').innerHTML=data.map(phase=>`
+    <div class="phase">
+      <div class="phase-header">
+        <span class="phase-num">${phase.id}</span>
+        <span class="phase-title">${phase.title}</span>
+        <span class="phase-count">${phase.topics.length} topic${phase.topics.length>1?'s':''}</span>
+      </div>
+      <div class="topics-grid">
+        ${phase.topics.map(t=>{
+          topics++;practice+=t.practice.length;
+          return `
+          <div class="topic-card" data-level="${t.level}" onclick="toggle(this)">
+            <div class="topic-head">
+              <div class="topic-check" onclick="markDone(event,this.closest('.topic-card'))">✓</div>
+              <div class="topic-info">
+                <div class="topic-name">${t.name}</div>
+                <div class="badges">${t.badges.map(b=>`<span class="badge badge-${b}">${b}</span>`).join('')}</div>
+              </div>
+              <div class="topic-arrow">›</div>
+            </div>
+            <div class="topic-body">
+              <div class="body-inner">
+                <div class="body-col">
+                  <div class="col-title react">// Concepts</div>
+                  <ul class="concepts">${t.concepts.map(c=>`<li>${c}</li>`).join('')}</ul>
+                  ${t.projects?`
+                    <div style="margin-top:14px">
+                      <div class="col-title project" style="margin-top:0">// Mini Project</div>
+                      ${t.projects.map(p=>`
+                        <div class="mini-project">
+                          <div class="mp-title">${p.name}</div>
+                          <div class="mp-desc">${p.desc}</div>
+                        </div>`).join('')}
+                    </div>`:''}
+                </div>
+                <div class="body-col">
+                  <div class="col-title practice">// Practice</div>
+                  <ul class="practice-list">${t.practice.map((p,i)=>`<li><strong>${i+1}.</strong>${p}</li>`).join('')}</ul>
+                </div>
+              </div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`).join('');
+  document.getElementById('topicCount').textContent=topics;
+  document.getElementById('practiceCount').textContent=practice;
+  updateProg();
+}
+
+function renderProjects(){
+  document.getElementById('projectsGrid').innerHTML=projects.map((p,i)=>`
+    <div class="project-card" data-level="${p.level}">
+      <div class="pc-level ${p.level}">${p.level}</div>
+      <div class="pc-num">${String(i+1).padStart(2,'0')}</div>
+      <div class="pc-title">${p.title}</div>
+      <div class="pc-desc">${p.desc}</div>
+      <div class="pc-tags">${p.tags.map(t=>`<span class="pc-tag">${t}</span>`).join('')}</div>
+    </div>`).join('');
+}
+
+render(); renderProjects();
+</script>
+</body>
+</html>

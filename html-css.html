@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML & CSS Mastery Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Syne:wght@400;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --bg2: #ede8dc;
+    --ink: #1a1612;
+    --ink2: #3d352a;
+    --muted: #8a7f72;
+    --border: #d4cbbf;
+    --accent-html: #e8431a;
+    --accent-css: #264de4;
+    --accent-both: #0a8a5e;
+    --card: #faf8f4;
+    --done-bg: #eaf7f1;
+    --done-border: #0a8a5e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Paper texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(26,22,18,0.025) 28px, rgba(26,22,18,0.025) 29px),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9000;
+  }
+
+  /* HEADER */
+  header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 340px;
+    border-bottom: 3px solid var(--ink);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header-left {
+    padding: 48px 48px 40px;
+    border-right: 2px solid var(--ink);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .header-kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--muted);
+    filter: brightness(2);
+  }
+
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(48px, 6vw, 80px);
+    line-height: 0.95;
+    font-weight: 900;
+    color: #f5f0e8;
+  }
+
+  .header-title .html { color: #ff6b3d; }
+  .header-title .amp { color: var(--muted); filter: brightness(1.5); font-style: italic; }
+  .header-title .css { color: #6b8fff; }
+
+  .header-sub {
+    font-size: 13px;
+    color: var(--muted);
+    filter: brightness(1.8);
+    line-height: 1.7;
+    max-width: 320px;
+    margin-top: 12px;
+  }
+
+  .header-right {
+    padding: 40px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .progress-section { margin-top: 24px; }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .progress-label span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .progress-label strong { color: var(--ink); }
+
+  .progress-track {
+    height: 6px;
+    background: var(--border);
+    border-radius: 0;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-html), var(--accent-css));
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  /* FILTER NAV */
+  .filter-nav {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid var(--ink);
+    overflow-x: auto;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 100;
+  }
+
+  .filter-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 14px 24px;
+    border: none;
+    border-right: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .filter-btn:hover { background: var(--bg2); color: var(--ink); }
+  .filter-btn.active { background: var(--ink); color: var(--bg); }
+
+  /* ROADMAP */
+  .roadmap {
+    padding: 0;
+  }
+
+  .phase {
+    border-bottom: 2px solid var(--ink);
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .phase:nth-child(1) { animation-delay: 0.05s; }
+  .phase:nth-child(2) { animation-delay: 0.1s; }
+  .phase:nth-child(3) { animation-delay: 0.15s; }
+  .phase:nth-child(4) { animation-delay: 0.2s; }
+  .phase:nth-child(5) { animation-delay: 0.25s; }
+  .phase:nth-child(6) { animation-delay: 0.3s; }
+
+  .phase-header {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .phase-num-block {
+    padding: 24px 20px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg2);
+    gap: 4px;
+  }
+
+  .phase-roman {
+    font-family: 'Playfair Display', serif;
+    font-size: 40px;
+    font-weight: 900;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .phase-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .phase-title-block {
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .phase-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  .phase-scope {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 0;
+  }
+
+  .topic-card {
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+    background: var(--card);
+  }
+
+  .topic-card:hover { background: var(--bg2); }
+  .topic-card.completed { background: var(--done-bg); }
+
+  .topic-header {
+    display: flex;
+    align-items: stretch;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+
+  .topic-card.open .topic-header { border-bottom-color: var(--border); }
+
+  .topic-check {
+    width: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid var(--border);
+    cursor: pointer;
+    flex-shrink: 0;
+    font-size: 16px;
+    color: var(--border);
+    transition: all 0.2s;
+  }
+
+  .topic-check:hover { background: rgba(10,138,94,0.08); }
+  .topic-card.completed .topic-check { color: var(--done-border); background: rgba(10,138,94,0.1); }
+
+  .topic-meta {
+    flex: 1;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .topic-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+
+  .topic-badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 1px;
+    padding: 2px 7px;
+    text-transform: uppercase;
+    border: 1px solid;
+  }
+
+  .badge-html { border-color: var(--accent-html); color: var(--accent-html); }
+  .badge-css { border-color: var(--accent-css); color: var(--accent-css); }
+  .badge-both { border-color: var(--accent-both); color: var(--accent-both); }
+  .badge-beginner { border-color: #888; color: #888; }
+  .badge-intermediate { border-color: #c07a00; color: #c07a00; }
+  .badge-advanced { border-color: var(--accent-html); color: var(--accent-html); }
+
+  .topic-arrow {
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    color: var(--border);
+    font-size: 18px;
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+
+  .topic-card.open .topic-arrow { transform: rotate(90deg); }
+
+  /* Expandable body */
+  .topic-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+
+  .topic-card.open .topic-body { max-height: 1200px; }
+
+  .topic-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 0;
+  }
+
+  .body-col {
+    padding: 20px;
+    border-right: 1px solid var(--border);
+  }
+
+  .body-col:last-child { border-right: none; }
+
+  .body-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent-html);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .body-section-title.css-col { color: var(--accent-css); }
+  .body-section-title.practice-col { color: var(--accent-both); }
+  .body-section-title.project-col { color: var(--ink2); }
+
+  .concept-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .concept-list li {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink2);
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .concept-list li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: var(--muted);
+  }
+
+  .practice-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .practice-list li {
+    font-size: 11px;
+    color: var(--ink2);
+    line-height: 1.6;
+    padding: 8px 10px;
+    background: rgba(38,77,228,0.04);
+    border-left: 2px solid var(--accent-css);
+    counter-increment: practice;
+  }
+
+  .practice-list li strong {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent-css);
+    font-size: 10px;
+  }
+
+  .project-box {
+    padding: 12px;
+    border: 1px solid var(--border);
+    margin-top: 0;
+  }
+
+  .project-box + .project-box { margin-top: 8px; }
+
+  .project-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .project-desc {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* BIG PROJECTS */
+  .big-projects {
+    border-top: 3px solid var(--ink);
+  }
+
+  .bp-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    padding: 40px 48px 32px;
+    border-bottom: 2px solid var(--ink);
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .bp-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .bp-title em { color: #ff6b3d; font-style: italic; }
+
+  .bp-subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    filter: brightness(1.5);
+    margin-top: 10px;
+  }
+
+  .bp-count {
+    font-family: 'Playfair Display', serif;
+    font-size: 100px;
+    font-weight: 900;
+    color: var(--border);
+    line-height: 1;
+    opacity: 0.3;
+  }
+
+  .bp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  .bp-card {
+    padding: 28px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    background: var(--card);
+    transition: background 0.2s;
+  }
+
+  .bp-card:hover { background: var(--bg2); }
+
+  .bp-level-bar {
+    height: 3px;
+    margin-bottom: 20px;
+  }
+
+  .bp-card[data-type="html"] .bp-level-bar { background: var(--accent-html); }
+  .bp-card[data-type="css"] .bp-level-bar { background: var(--accent-css); }
+  .bp-card[data-type="both"] .bp-level-bar { background: linear-gradient(90deg, var(--accent-html), var(--accent-css)); }
+
+  .bp-card-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px;
+    font-weight: 900;
+    color: var(--border);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .bp-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+
+  .bp-card-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 14px;
+  }
+
+  .bp-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .bp-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .bp-difficulty {
+    position: absolute;
+    top: 28px;
+    right: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 3px solid var(--ink);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 900;
+  }
+
+  .footer-logo span { color: #ff6b3d; }
+  .footer-logo em { color: #6b8fff; font-style: normal; }
+
+  .footer-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    filter: brightness(1.5);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    header { grid-template-columns: 1fr; }
+    .header-left { border-right: none; border-bottom: 2px solid rgba(255,255,255,0.1); }
+    .phase-header { grid-template-columns: 80px 1fr; }
+    .topic-inner { grid-template-columns: 1fr; }
+    .body-col { border-right: none; border-bottom: 1px solid var(--border); }
+    .bp-header { grid-template-columns: 1fr; }
+    header, footer, .bp-header { padding: 28px; }
+  }
+</style>
+</head>
+<body><nav style="position:sticky;top:0;z-index:9000;background:rgba(7,8,15,0.95);backdrop-filter:blur(16px);border-bottom:1px solid #1c2040;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:52px;font-family:'JetBrains Mono',monospace"><a href="index.html" style="color:#6c8eff;font-size:12px;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:8px;letter-spacing:1px;"><span style="background:linear-gradient(135deg,#6c8eff,#a855f7);width:24px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;color:white;font-weight:700">DM</span>DevMastery</a><div style="display:flex;gap:4px;overflow-x:auto"><a href="html-css.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap;transition:color 0.2s" onmouseover="this.style.color='#e34c26'" onmouseout="this.style.color='#4a5280'">HTML/CSS</a><a href="javascript.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap" onmouseover="this.style.color='#d4b800'" onmouseout="this.style.color='#4a5280'">JavaScript</a><a href="react.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap" onmouseover="this.style.color='#61dafb'" onmouseout="this.style.color='#4a5280'">React</a><a href="nodejs.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap" onmouseover="this.style.color='#68a063'" onmouseout="this.style.color='#4a5280'">Node.js</a><a href="sql.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap" onmouseover="this.style.color='#2d9e2d'" onmouseout="this.style.color='#4a5280'">SQL</a></div></nav>
+
+<header>
+  <div class="header-left">
+    <span class="header-kicker">// Complete Learning Path · 2025 Edition</span>
+    <div>
+      <div class="header-title">
+        <span class="html">HTML</span><br>
+        <span class="amp">&amp;</span><br>
+        <span class="css">CSS</span>
+      </div>
+      <p class="header-sub">Every concept, practice challenge, and project to master the building blocks of the web — from your first tag to production-ready designs.</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="stats-row">
+      <div class="stat">
+        <span class="stat-num" id="totalTopics">—</span>
+        <span class="stat-label">Topics</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num" id="totalPractice">—</span>
+        <span class="stat-label">Challenges</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">10</span>
+        <span class="stat-label">Projects</span>
+      </div>
+    </div>
+    <div class="progress-section">
+      <div class="progress-label">
+        <span>Your Progress</span>
+        <strong id="progressText">0 / 0</strong>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--accent-html)"></div> HTML</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--accent-css)"></div> CSS</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--accent-both)"></div> Both</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="filter-nav">
+  <button class="filter-btn active" onclick="filterTopics('all', this)">All Topics</button>
+  <button class="filter-btn" onclick="filterTopics('html', this)">HTML Only</button>
+  <button class="filter-btn" onclick="filterTopics('css', this)">CSS Only</button>
+  <button class="filter-btn" onclick="filterTopics('both', this)">HTML + CSS</button>
+  <button class="filter-btn" onclick="filterTopics('beginner', this)">Beginner</button>
+  <button class="filter-btn" onclick="filterTopics('intermediate', this)">Intermediate</button>
+  <button class="filter-btn" onclick="filterTopics('advanced', this)">Advanced</button>
+</nav>
+
+<div class="roadmap" id="roadmap"></div>
+
+<div class="big-projects">
+  <div class="bp-header">
+    <div>
+      <h2 class="bp-title">Build These<br><em>Projects</em></h2>
+      <p class="bp-subtitle">Real work to prove you know your craft</p>
+    </div>
+    <div class="bp-count">10</div>
+  </div>
+  <div class="bp-grid" id="projectsGrid"></div>
+</div>
+
+<footer>
+  <div class="footer-logo"><span>HTML</span> &amp; <em>CSS</em> Mastery</div>
+  <span class="footer-meta" id="footerProgress">Click any topic to expand · Check off to track progress</span>
+</footer>
+
+<script>
+const roadmapData = [
+  {
+    phase: "I",
+    phaseNum: 1,
+    label: "Phase 01",
+    title: "HTML Foundations",
+    scope: "HTML",
+    topics: [
+      {
+        name: "Document Structure & Boilerplate",
+        type: "html",
+        level: "beginner",
+        concepts: ["DOCTYPE declaration", "html, head, body elements", "meta charset & viewport", "title tag", "Comments in HTML", "Browser parsing basics", "HTML5 vs HTML4 differences"],
+        practice: [
+          "Build a valid HTML5 page from scratch without any help",
+          "Add proper meta tags for SEO (description, keywords, author)",
+          "Create a page that displays correctly on mobile using viewport meta",
+          "Write comments explaining each section of a boilerplate"
+        ],
+        projects: [{ name: "Personal Profile Page", desc: "Structured HTML profile page (no styling yet)" }]
+      },
+      {
+        name: "Text & Semantic Elements",
+        type: "html",
+        level: "beginner",
+        concepts: ["h1–h6 heading hierarchy", "p, span, div", "strong, em, mark, del, ins, sub, sup", "blockquote, cite, q", "pre, code, kbd, samp", "br, hr", "Semantic meaning vs presentational"],
+        practice: [
+          "Mark up a news article using proper semantic headings and paragraphs",
+          "Use blockquote and cite for a famous quote",
+          "Create a code snippet display using pre and code",
+          "Explain the difference between strong vs b, and em vs i"
+        ],
+        projects: [{ name: "Recipe Article", desc: "Fully semantic HTML recipe with headings, lists, and emphasis" }]
+      },
+      {
+        name: "Lists & Tables",
+        type: "html",
+        level: "beginner",
+        concepts: ["ul, ol, li", "Nested lists", "dl, dt, dd (description lists)", "table, thead, tbody, tfoot", "tr, th, td", "colspan, rowspan", "caption, scope attribute", "Accessible table headers"],
+        practice: [
+          "Create a nested list of countries and their cities",
+          "Build a data table for a class schedule with merged cells",
+          "Make a comparison table of 3 products with rowspan",
+          "Add proper scope attributes for accessibility"
+        ],
+        projects: [{ name: "Timetable / Schedule", desc: "Weekly schedule using semantic table markup" }]
+      },
+      {
+        name: "Links & Media",
+        type: "html",
+        level: "beginner",
+        concepts: ["a href, target, rel", "Absolute vs relative paths", "Anchor links (#id)", "img: src, alt, width, height, loading", "figure and figcaption", "video and audio elements", "source element & multiple formats", "iframe basics", "picture element & srcset"],
+        practice: [
+          "Create a navigation with links to different sections of a long page",
+          "Embed a YouTube video using iframe with no cookies",
+          "Use srcset to serve different image sizes for different screen widths",
+          "Add a lazy-loading attribute to all images below the fold"
+        ],
+        projects: [{ name: "Media Gallery", desc: "Image + video gallery with figure/figcaption markup" }]
+      },
+      {
+        name: "Forms",
+        type: "html",
+        level: "intermediate",
+        concepts: ["form, action, method", "input types: text, email, password, number, date, range, color, file, checkbox, radio", "textarea, select, option, optgroup", "label and for attribute", "fieldset and legend", "placeholder, required, disabled, readonly", "datalist for autocomplete", "HTML5 validation attributes (pattern, min, max, minlength)", "button types"],
+        practice: [
+          "Build a full registration form with all common field types",
+          "Create a multi-step form UI using fieldset sections",
+          "Add HTML5 validation to a contact form (no JS)",
+          "Build a survey with radio groups, checkboxes, and a range slider"
+        ],
+        projects: [{ name: "Contact / Registration Form", desc: "Fully accessible form with HTML5 validation, all input types" }]
+      },
+      {
+        name: "Semantic HTML5 & Accessibility",
+        type: "html",
+        level: "intermediate",
+        concepts: ["header, nav, main, aside, footer, section, article", "ARIA roles and attributes", "ARIA labels (aria-label, aria-labelledby, aria-describedby)", "tabindex", "alt text best practices", "Skip navigation links", "Landmark roles", "Screen reader considerations"],
+        practice: [
+          "Audit a page and replace all div-soup with semantic elements",
+          "Add ARIA labels to icon-only buttons",
+          "Create a skip-to-main-content link",
+          "Build a navigation that works with keyboard-only users"
+        ],
+        projects: [{ name: "Accessible Blog Layout", desc: "Full blog page with proper landmarks, ARIA, and skip links" }]
+      }
+    ]
+  },
+  {
+    phase: "II",
+    phaseNum: 2,
+    label: "Phase 02",
+    title: "CSS Foundations",
+    scope: "CSS",
+    topics: [
+      {
+        name: "Selectors & Specificity",
+        type: "css",
+        level: "beginner",
+        concepts: ["Element, class, ID selectors", "Descendant, child, adjacent, sibling combinators", "Pseudo-classes: :hover, :focus, :nth-child, :first-child, :last-child, :not", "Pseudo-elements: ::before, ::after, ::placeholder", "Attribute selectors [attr], [attr=val]", "Specificity calculation (0,0,0 system)", "!important and when to avoid it", "The cascade and inheritance"],
+        practice: [
+          "Calculate the specificity of 5 complex selectors",
+          "Style every other row of a table using nth-child",
+          "Add a custom bullet using ::before pseudo-element",
+          "Style a form's placeholder text with ::placeholder"
+        ],
+        projects: [{ name: "Styled Card Component", desc: "Card designed using only selectors — no inline styles, no classes for everything" }]
+      },
+      {
+        name: "The Box Model",
+        type: "css",
+        level: "beginner",
+        concepts: ["content, padding, border, margin", "box-sizing: border-box vs content-box", "width, min-width, max-width, height", "overflow: hidden, scroll, auto, visible", "display: block, inline, inline-block, none", "outline vs border", "CSS reset vs normalize"],
+        practice: [
+          "Visualize the box model by adding colored borders and backgrounds",
+          "Fix a layout broken by box-sizing differences",
+          "Create a card with consistent internal spacing using padding",
+          "Build a horizontal scrolling gallery using overflow-x"
+        ],
+        projects: [{ name: "Pricing Cards", desc: "Three pricing tier cards using box model only" }]
+      },
+      {
+        name: "Colors, Typography & Units",
+        type: "css",
+        level: "beginner",
+        concepts: ["Color: named, hex, rgb, rgba, hsl, hsla", "CSS custom properties (variables)", "font-family, font-size, font-weight, font-style", "line-height, letter-spacing, text-align, text-decoration, text-transform", "web fonts via @font-face and Google Fonts", "Units: px, em, rem, %, vw, vh, vmin, vmax", "clamp() for fluid typography", "Viewport units"],
+        practice: [
+          "Build a type scale using rem with a base font size",
+          "Create a full dark/light theme using CSS variables only",
+          "Use clamp() to make a heading fluid between 24px and 64px",
+          "Load a Google Font and apply it with a system font fallback stack"
+        ],
+        projects: [{ name: "Typography Specimen Page", desc: "Showcase a full type system with color palette using CSS variables" }]
+      },
+      {
+        name: "Backgrounds & Visual Effects",
+        type: "css",
+        level: "beginner",
+        concepts: ["background-color, background-image, background-size (cover/contain)", "background-position, background-repeat", "Multiple backgrounds", "Linear and radial gradients", "Conic gradients", "box-shadow (single, multiple, inset)", "text-shadow", "border-radius", "opacity vs rgba", "filter: blur, brightness, contrast, grayscale, saturate, drop-shadow", "backdrop-filter"],
+        practice: [
+          "Create a hero section with a gradient overlay on an image",
+          "Build a card with a subtle box-shadow and hover glow effect",
+          "Make a CSS-only loading spinner using conic-gradient",
+          "Apply backdrop-filter blur to a sticky header"
+        ],
+        projects: [{ name: "Hero Section", desc: "Landing page hero with gradient overlay, shadow effects, and styled text" }]
+      }
+    ]
+  },
+  {
+    phase: "III",
+    phaseNum: 3,
+    label: "Phase 03",
+    title: "CSS Layout Systems",
+    scope: "CSS",
+    topics: [
+      {
+        name: "Flexbox",
+        type: "css",
+        level: "intermediate",
+        concepts: ["display: flex", "flex-direction (row/column)", "justify-content", "align-items, align-self, align-content", "flex-wrap", "flex-grow, flex-shrink, flex-basis", "The flex shorthand", "order property", "gap in flex", "Nested flex containers"],
+        practice: [
+          "Build a navbar with logo left and links right using flexbox",
+          "Create a card grid that wraps and stays aligned",
+          "Center anything both horizontally and vertically using flexbox",
+          "Build a holy grail layout (header, sidebar, content, footer)"
+        ],
+        projects: [{ name: "Flexbox Dashboard", desc: "Admin dashboard layout built entirely with Flexbox" }]
+      },
+      {
+        name: "CSS Grid",
+        type: "css",
+        level: "intermediate",
+        concepts: ["display: grid", "grid-template-columns, grid-template-rows", "fr unit", "repeat(), minmax()", "auto-fill vs auto-fit", "grid-column, grid-row (start / end)", "grid-area", "grid-template-areas", "Named grid lines", "gap (column-gap, row-gap)", "Implicit vs explicit grid", "Subgrid"],
+        practice: [
+          "Build a magazine-style layout with items spanning multiple columns",
+          "Create a photo gallery with grid-auto-flow: dense",
+          "Name grid areas to build a full page layout",
+          "Use auto-fit + minmax() for a responsive card grid with no media queries"
+        ],
+        projects: [{ name: "Magazine / Portfolio Layout", desc: "Asymmetric grid layout with spanning items like a magazine" }]
+      },
+      {
+        name: "Positioning & Z-index",
+        type: "css",
+        level: "intermediate",
+        concepts: ["position: static, relative, absolute, fixed, sticky", "top, right, bottom, left", "z-index and stacking contexts", "Containing block concept", "overflow and its effect on sticky", "CSS stacking order rules"],
+        practice: [
+          "Build a tooltip using position: absolute relative to its parent",
+          "Create a sticky header that stays at the top while scrolling",
+          "Fix a z-index bug caused by a new stacking context",
+          "Overlay a badge on a card using absolute positioning"
+        ],
+        projects: [{ name: "Sticky Sidebar + Modal", desc: "Page with sticky sidebar, overlay modal, and floating action button" }]
+      },
+      {
+        name: "Responsive Design & Media Queries",
+        type: "css",
+        level: "intermediate",
+        concepts: ["Mobile-first vs desktop-first approach", "@media (min-width, max-width, orientation)", "Breakpoints strategy", "Responsive images (max-width: 100%)", "Fluid layouts vs fixed", "Container queries (@container)", "CSS clamp() for fluid spacing", "Responsive typography", "print media queries"],
+        practice: [
+          "Convert a desktop-only layout to fully responsive using mobile-first",
+          "Build a navigation that collapses to a hamburger on mobile",
+          "Use a container query to restyle a card based on its container width",
+          "Create a print stylesheet that hides navigation and adds URLs after links"
+        ],
+        projects: [{ name: "Fully Responsive Landing Page", desc: "Landing page that looks great on mobile, tablet, and desktop" }]
+      }
+    ]
+  },
+  {
+    phase: "IV",
+    phaseNum: 4,
+    label: "Phase 04",
+    title: "Animation & Interaction",
+    scope: "CSS",
+    topics: [
+      {
+        name: "Transitions",
+        type: "css",
+        level: "intermediate",
+        concepts: ["transition-property, duration, timing-function, delay", "transition shorthand", "Timing functions: ease, linear, ease-in-out, cubic-bezier", "Transitioning multiple properties", "What can and can't be transitioned", "transition vs animation", "will-change property"],
+        practice: [
+          "Add smooth hover transitions to all buttons and links on a page",
+          "Create a card flip effect using transition and transform",
+          "Build a growing underline effect on hover using pseudo-element + transition",
+          "Compare transitions with different timing functions visually"
+        ],
+        projects: [{ name: "Interactive Card Hover Effects", desc: "Collection of 6 card hover effects using only CSS transitions" }]
+      },
+      {
+        name: "Animations with @keyframes",
+        type: "css",
+        level: "intermediate",
+        concepts: ["@keyframes syntax (from/to, percentage stops)", "animation-name, duration, timing-function, delay, iteration-count, direction, fill-mode, play-state", "animation shorthand", "Multiple animations on one element", "Animating transforms (translate, rotate, scale, skew)", "Steps() timing function", "Reduced motion (@prefers-reduced-motion)"],
+        practice: [
+          "Build a CSS loading spinner using rotation animation",
+          "Create a typewriter effect using steps() and width animation",
+          "Animate a skeleton loader with a shimmer effect",
+          "Build a bouncing ball with proper easing and squash/stretch"
+        ],
+        projects: [{ name: "CSS Animation Showcase", desc: "5 different pure CSS animations: loader, pulse, shimmer, bounce, wave" }]
+      },
+      {
+        name: "Transforms",
+        type: "css",
+        level: "intermediate",
+        concepts: ["translate(), translateX(), translateY()", "rotate(), rotateX(), rotateY()", "scale(), scaleX(), scaleY()", "skew(), skewX(), skewY()", "matrix()", "transform-origin", "3D transforms and perspective", "transform-style: preserve-3d"],
+        practice: [
+          "Center an absolutely positioned element using transform: translate(-50%, -50%)",
+          "Build a 3D card flip using rotateY and backface-visibility",
+          "Create a CSS cube with 6 faces using 3D transforms",
+          "Animate a clock's hands using rotate with transform-origin at center bottom"
+        ],
+        projects: [{ name: "3D Card / CSS Cube", desc: "Interactive 3D card flip or rotating CSS cube on hover" }]
+      }
+    ]
+  },
+  {
+    phase: "V",
+    phaseNum: 5,
+    label: "Phase 05",
+    title: "Advanced CSS",
+    scope: "CSS",
+    topics: [
+      {
+        name: "CSS Custom Properties (Variables)",
+        type: "css",
+        level: "intermediate",
+        concepts: ["Declaring with --name: value", "Using with var()", "Fallback values in var()", "Scope: :root vs local scope", "Updating variables with JavaScript", "Using variables for theme switching", "CSS variable in calc()", "Logical properties"],
+        practice: [
+          "Build a complete design token system using CSS variables",
+          "Implement a dark/light theme toggle using a class on :root",
+          "Use JS to update a CSS variable in real time",
+          "Build a color palette generator with CSS variables"
+        ],
+        projects: [{ name: "Themeable Component Library", desc: "Button, card, and input components with 3 switchable themes via CSS variables" }]
+      },
+      {
+        name: "CSS Functions & Calculations",
+        type: "css",
+        level: "advanced",
+        concepts: ["calc() for mixed-unit math", "clamp(min, preferred, max)", "min() and max()", "env() for safe areas", "counter() and counters()", "attr() in content", "Custom counter styles", "CSS math functions in practice"],
+        practice: [
+          "Create a fluid layout with calc() that has fixed gutters and flexible columns",
+          "Use clamp() to build a fully fluid type scale (no breakpoints!)",
+          "Auto-number headings using CSS counters",
+          "Create a responsive sidebar using min() for width"
+        ],
+        projects: [{ name: "Fluid Grid System", desc: "12-column fluid grid built with calc() and CSS variables only" }]
+      },
+      {
+        name: "CSS Architecture (BEM & Methodology)",
+        type: "css",
+        level: "advanced",
+        concepts: ["BEM: Block__Element--Modifier naming", "OOCSS (Object-Oriented CSS)", "Utility-first CSS concept", "CSS Modules concept", "Avoiding specificity wars", "Organizing stylesheets", "Critical CSS", "CSS layers (@layer)"],
+        practice: [
+          "Refactor a messy stylesheet to use BEM naming",
+          "Build a button component with BEM: .btn, .btn--primary, .btn--large",
+          "Use @layer to control cascade order in a large stylesheet",
+          "Identify and fix a specificity conflict in a codebase"
+        ],
+        projects: [{ name: "Component Library (BEM)", desc: "Reusable UI components with BEM-structured CSS" }]
+      },
+      {
+        name: "Modern CSS Features",
+        type: "css",
+        level: "advanced",
+        concepts: ["CSS Nesting (native)", ":is(), :where(), :has() selectors", "Container queries (@container)", "Scroll-driven animations", "CSS subgrid", "color-mix() and oklch()", "@property for typed custom properties", "CSS Houdini concepts", "View Transitions API"],
+        practice: [
+          "Use :has() to style a form label when its input is focused",
+          "Build a card that rearranges itself using container queries",
+          "Create a scroll-driven animation where a progress bar fills as you scroll",
+          "Use color-mix() to create tints and shades of a brand color"
+        ],
+        projects: [{ name: "Scroll-Driven Portfolio", desc: "Portfolio page with scroll animations using @keyframes + animation-timeline" }]
+      }
+    ]
+  },
+  {
+    phase: "VI",
+    phaseNum: 6,
+    label: "Phase 06",
+    title: "HTML + CSS Together",
+    scope: "HTML + CSS",
+    topics: [
+      {
+        name: "Component Patterns",
+        type: "both",
+        level: "intermediate",
+        concepts: ["Navigation bars (horizontal, vertical, hamburger)", "Cards (product, profile, blog)", "Modals and overlays", "Accordions (CSS-only using :checked hack or details/summary)", "Tabs", "Tooltips and popovers", "Badges and pills", "Alerts and notifications", "Breadcrumbs"],
+        practice: [
+          "Build a fully keyboard-accessible CSS-only accordion using details/summary",
+          "Create a tab switcher using radio inputs and :checked (no JS)",
+          "Build a tooltip that appears above/below depending on space available",
+          "Make a modal dialog accessible with focus trapping (describe the approach)"
+        ],
+        projects: [{ name: "UI Component Kit", desc: "10+ reusable components: buttons, cards, modals, accordions, badges" }]
+      },
+      {
+        name: "Full Page Layouts",
+        type: "both",
+        level: "intermediate",
+        concepts: ["Landing pages", "Blog layouts", "Dashboard layouts", "Portfolio layouts", "E-commerce product page", "Login / auth page", "Documentation layout (sidebar + content)", "404 page"],
+        practice: [
+          "Build a landing page with hero, features section, testimonials, and footer",
+          "Create a blog post page with sidebar, comments section, and related posts",
+          "Design a product page with image gallery, details, and add-to-cart",
+          "Build a responsive docs layout with a sticky sidebar nav"
+        ],
+        projects: [{ name: "Full Portfolio Website", desc: "Multi-section portfolio with all layout types used appropriately" }]
+      },
+      {
+        name: "Performance & Best Practices",
+        type: "both",
+        level: "advanced",
+        concepts: ["Image optimization (WebP, AVIF, compression)", "Critical rendering path", "Render-blocking CSS avoidance", "loading=lazy for images and iframes", "Preload, prefetch, preconnect hints", "CSS file organization", "Minification and bundling concepts", "Core Web Vitals: LCP, CLS, FID/INP", "Reducing CLS with size attributes on images"],
+        practice: [
+          "Audit a page with Chrome DevTools and identify render-blocking resources",
+          "Add width and height to all images to prevent CLS",
+          "Use <link rel='preconnect'> for external fonts",
+          "Measure and improve a page's LCP score"
+        ],
+        projects: [{ name: "Performance-Optimized Page", desc: "Landing page scoring 90+ on Google PageSpeed Insights" }]
+      }
+    ]
+  }
+];
+
+const bigProjects = [
+  { type: "html", difficulty: "Beginner", title: "Semantic Blog Post", desc: "A fully semantic, accessible HTML blog article — no CSS. Focus purely on structure, proper heading hierarchy, schema markup, and ARIA.", tags: ["Semantic HTML", "Accessibility", "ARIA", "SEO"] },
+  { type: "css", difficulty: "Beginner", title: "CSS Art", desc: "Create a drawing or illustration using only HTML div elements and CSS. No images, SVGs, or JS allowed.", tags: ["Box Model", "Transforms", "Gradients", "Border-radius"] },
+  { type: "both", difficulty: "Beginner", title: "Personal Profile Page", desc: "Responsive personal homepage with a bio, skills section, contact form, and social links. Mobile-first design.", tags: ["Flexbox", "Responsive", "Forms", "Semantic HTML"] },
+  { type: "both", difficulty: "Intermediate", title: "Restaurant Website", desc: "Multi-page restaurant site with menu, reservation form, gallery, and location map. Must be fully responsive.", tags: ["Grid", "Flexbox", "Forms", "Media Queries"] },
+  { type: "css", difficulty: "Intermediate", title: "Pure CSS Animations", desc: "Create 5 polished CSS animations: a loading spinner, a typewriter, a bouncing ball, a wave loader, and a CSS-only dark/light toggle.", tags: ["Keyframes", "Transitions", "Transforms", "Variables"] },
+  { type: "both", difficulty: "Intermediate", title: "E-Commerce Product Page", desc: "Detailed product page with image gallery (thumbnails), size selector, color swatches, accordion FAQs, and related products grid.", tags: ["Grid", "Flexbox", "Pseudo-classes", "Responsive"] },
+  { type: "both", difficulty: "Intermediate", title: "Dashboard Layout", desc: "Responsive admin dashboard with sidebar navigation, stat cards, data table, and chart placeholders. Collapses to mobile nav.", tags: ["Grid", "Flexbox", "CSS Variables", "Responsive"] },
+  { type: "css", difficulty: "Advanced", title: "Scroll-Driven Experience", desc: "A storytelling page where animations are triggered by scroll position using CSS scroll-driven animations — no JavaScript.", tags: ["Animation Timeline", "Scroll", "Keyframes", "Modern CSS"] },
+  { type: "both", difficulty: "Advanced", title: "Themeable Design System", desc: "Build a mini design system with documented tokens, 15+ components, and 3 themes switchable via a CSS variable override.", tags: ["CSS Variables", "BEM", "Layers", "Container Queries"] },
+  { type: "both", difficulty: "Advanced", title: "Full Portfolio Website", desc: "Complete personal portfolio with hero, about, projects grid, skills, testimonials, contact form, and footer. 95+ PageSpeed score.", tags: ["All Concepts", "Performance", "Responsive", "Accessibility"] }
+];
+
+function toggleCard(card) { card.classList.toggle('open'); }
+
+function markDone(e, card) {
+  e.stopPropagation();
+  card.classList.toggle('completed');
+  updateProgress();
+}
+
+function updateProgress() {
+  const all = document.querySelectorAll('.topic-card');
+  const done = document.querySelectorAll('.topic-card.completed');
+  const pct = all.length ? (done.length / all.length * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `${done.length} / ${all.length}`;
+  document.getElementById('footerProgress').textContent = `${Math.round(pct)}% complete — keep going!`;
+}
+
+function filterTopics(filter, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.topic-card').forEach(card => {
+    const type = card.dataset.type;
+    const level = card.dataset.level;
+    let show = filter === 'all' ||
+      filter === type ||
+      (filter === 'both' && type === 'both') ||
+      filter === level;
+    card.style.display = show ? '' : 'none';
+  });
+}
+
+function badgeType(type) {
+  if (type === 'html') return '<span class="badge badge-html">HTML</span>';
+  if (type === 'css') return '<span class="badge badge-css">CSS</span>';
+  return '<span class="badge badge-html">HTML</span><span class="badge badge-css">CSS</span>';
+}
+
+function badgeLevel(level) {
+  return `<span class="badge badge-${level}">${level}</span>`;
+}
+
+function romanNumerals(n) {
+  const r = ["I","II","III","IV","V","VI","VII","VIII","IX","X"];
+  return r[n-1] || n;
+}
+
+function renderRoadmap() {
+  const container = document.getElementById('roadmap');
+  let totalTopics = 0, totalPractice = 0;
+
+  container.innerHTML = roadmapData.map(phase => {
+    totalTopics += phase.topics.length;
+    phase.topics.forEach(t => totalPractice += t.practice.length);
+
+    return `
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num-block">
+          <div class="phase-roman">${phase.phase}</div>
+          <div class="phase-tag">${phase.label}</div>
+        </div>
+        <div class="phase-title-block">
+          <h2 class="phase-title">${phase.title}</h2>
+          <span class="phase-scope">${phase.scope}</span>
+        </div>
+      </div>
+      <div class="topics-grid">
+        ${phase.topics.map(topic => `
+          <div class="topic-card" data-type="${topic.type}" data-level="${topic.level}" onclick="toggleCard(this)">
+            <div class="topic-header">
+              <div class="topic-check" onclick="markDone(event, this.closest('.topic-card'))" title="Mark complete">
+                ✓
+              </div>
+              <div class="topic-meta">
+                <div class="topic-name">${topic.name}</div>
+                <div class="topic-badges">
+                  ${badgeType(topic.type)}
+                  ${badgeLevel(topic.level)}
+                </div>
+              </div>
+              <div class="topic-arrow">›</div>
+            </div>
+            <div class="topic-body">
+              <div class="topic-inner">
+                <div class="body-col">
+                  <div class="body-section-title ${topic.type === 'css' ? 'css-col' : topic.type === 'both' ? 'practice-col' : ''}">// Concepts to Learn</div>
+                  <ul class="concept-list">
+                    ${topic.concepts.map(c => `<li>${c}</li>`).join('')}
+                  </ul>
+                  ${topic.projects ? `
+                    <div style="margin-top:16px">
+                      <div class="body-section-title project-col" style="color:var(--ink2)">// Mini Project</div>
+                      ${topic.projects.map(p => `
+                        <div class="project-box">
+                          <div class="project-title">⬡ ${p.name}</div>
+                          <div class="project-desc">${p.desc}</div>
+                        </div>
+                      `).join('')}
+                    </div>
+                  ` : ''}
+                </div>
+                <div class="body-col">
+                  <div class="body-section-title practice-col">// Practice Challenges</div>
+                  <ul class="practice-list">
+                    ${topic.practice.map((p, i) => `<li><strong>${i+1}.</strong> ${p}</li>`).join('')}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `}).join('');
+
+  document.getElementById('totalTopics').textContent = totalTopics;
+  document.getElementById('totalPractice').textContent = totalPractice;
+  updateProgress();
+}
+
+function renderProjects() {
+  const grid = document.getElementById('projectsGrid');
+  grid.innerHTML = bigProjects.map((p, i) => `
+    <div class="bp-card" data-type="${p.type}">
+      <div class="bp-level-bar"></div>
+      <div class="bp-difficulty">${p.difficulty}</div>
+      <div class="bp-card-num">${String(i+1).padStart(2,'0')}</div>
+      <div class="bp-card-title">${p.title}</div>
+      <div class="bp-card-desc">${p.desc}</div>
+      <div class="bp-tags">
+        ${p.tags.map(t => `<span class="bp-tag">${t}</span>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+renderRoadmap();
+renderProjects();
+</script>
+</body>
+</html>

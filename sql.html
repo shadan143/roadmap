@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL Mastery Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;600;700&family=IBM+Plex+Serif:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f8faf7;
+  --bg2: #f0f4ef;
+  --surface: #ffffff;
+  --card: #ffffff;
+  --ink: #1a2a1a;
+  --ink2: #2d4a2d;
+  --border: #c8d8c8;
+  --border2: #9ab89a;
+  --green: #1a6b1a;
+  --green-light: #2d9e2d;
+  --green-bg: rgba(26,107,26,0.07);
+  --green-glow: rgba(26,107,26,0.2);
+  --amber: #b85c00;
+  --amber-bg: rgba(184,92,0,0.08);
+  --red: #a01010;
+  --red-bg: rgba(160,16,16,0.07);
+  --muted: #6a8a6a;
+  --done-bg: #e8f5e8;
+  --done-border: #2d9e2d;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'IBM Plex Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Terminal scanline effect subtle */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(26,107,26,0.007) 2px, rgba(26,107,26,0.007) 4px);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+header {
+  background: var(--ink);
+  color: #a8d8a8;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  min-height: 300px;
+}
+
+.header-main {
+  padding: 48px 48px 40px;
+  border-right: 1px solid #2a4a2a;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.header-main::after {
+  content: 'SQL';
+  position: absolute;
+  right: -10px;
+  bottom: -20px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 200px;
+  font-weight: 600;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(168,216,168,0.06);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.term-prompt {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: #4a8a4a;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.term-prompt::before {
+  content: '> ';
+  color: var(--green-light);
+}
+
+.cursor {
+  display: inline-block;
+  width: 10px;
+  height: 16px;
+  background: var(--green-light);
+  animation: blink 1s step-end infinite;
+  vertical-align: text-bottom;
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+h1 {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: clamp(52px, 7vw, 90px);
+  font-weight: 700;
+  line-height: 0.95;
+  color: #e0f0e0;
+}
+
+h1 .sql { color: var(--green-light); }
+
+.header-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: #4a8a4a;
+  line-height: 1.8;
+  max-width: 420px;
+  margin-top: 16px;
+}
+
+.header-panel {
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.panel-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: #4a8a4a;
+  text-transform: uppercase;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #2a4a2a;
+}
+
+.stat-rows { display: flex; flex-direction: column; gap: 12px; }
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.sr-label { font-size: 11px; color: #4a8a4a; letter-spacing: 1px; }
+.sr-val { font-size: 28px; font-weight: 600; color: #a8d8a8; }
+
+.prog-section { margin-top: auto; }
+.prog-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: #4a8a4a;
+}
+
+.prog-track {
+  height: 3px;
+  background: #2a4a2a;
+}
+
+.prog-fill {
+  height: 100%;
+  background: var(--green-light);
+  transition: width 0.5s ease;
+  width: 0%;
+  box-shadow: 0 0 6px var(--green-light);
+}
+
+/* Filter nav */
+.filter-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  overflow-x: auto;
+  background: var(--bg);
+  border-bottom: 2px solid var(--border2);
+}
+
+.filter-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 14px 22px;
+  border: none;
+  border-right: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.filter-btn:hover { background: var(--green-bg); color: var(--green); }
+.filter-btn.active { background: var(--green); color: white; }
+
+/* Roadmap */
+.phase {
+  border-bottom: 2px solid var(--border);
+  animation: fadeUp 0.4s ease both;
+}
+.phase:nth-child(1){animation-delay:.05s}
+.phase:nth-child(2){animation-delay:.1s}
+.phase:nth-child(3){animation-delay:.15s}
+.phase:nth-child(4){animation-delay:.2s}
+.phase:nth-child(5){animation-delay:.25s}
+
+.phase-header {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+}
+
+.phase-num-cell {
+  width: 100px;
+  padding: 20px;
+  border-right: 2px solid var(--border2);
+  text-align: center;
+}
+
+.phase-sql {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 2px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.phase-num-big {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--ink);
+  display: block;
+  line-height: 1;
+}
+
+.phase-title-cell {
+  flex: 1;
+  padding: 20px 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.phase-title {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.phase-scope {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  background: var(--green-bg);
+  color: var(--green);
+  border: 1px solid var(--border2);
+}
+
+/* Topics */
+.topics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+}
+
+.topic-card {
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.topic-card:hover { background: var(--bg2); }
+.topic-card.completed { background: var(--done-bg); border-color: rgba(45,158,45,0.3); }
+
+.topic-head {
+  display: flex;
+  align-items: stretch;
+}
+
+.topic-check {
+  width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--border);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  color: var(--border2);
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.topic-check:hover { background: var(--green-bg); color: var(--green); }
+.topic-card.completed .topic-check { color: var(--done-border); background: rgba(45,158,45,0.08); }
+
+.topic-meta {
+  flex: 1;
+  padding: 14px 16px;
+}
+
+.topic-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.badges { display: flex; gap: 5px; flex-wrap: wrap; }
+.badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 1px;
+  padding: 2px 7px;
+  border: 1px solid;
+  text-transform: uppercase;
+}
+
+.badge-beginner { border-color: #2d9e2d55; color: var(--green); }
+.badge-intermediate { border-color: #b85c0055; color: var(--amber); }
+.badge-advanced { border-color: #a0101055; color: var(--red); }
+.badge-dml { border-color: #1a6b1a55; color: var(--green); background: var(--green-bg); }
+.badge-ddl { border-color: #b85c0055; color: var(--amber); background: var(--amber-bg); }
+.badge-query { border-color: #26499e55; color: #264de4; background: rgba(38,73,158,0.06); }
+.badge-perf { border-color: #a0101055; color: var(--red); }
+
+.topic-arrow {
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  color: var(--border2);
+  font-size: 16px;
+  transition: transform 0.3s;
+  flex-shrink: 0;
+}
+
+.topic-card.open .topic-arrow { transform: rotate(90deg); color: var(--green); }
+
+.topic-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+.topic-card.open .topic-body { max-height: 1400px; }
+
+.body-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--border);
+}
+
+.body-col {
+  padding: 18px;
+  border-right: 1px solid var(--border);
+}
+.body-col:last-child { border-right: none; }
+
+.col-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  color: var(--green);
+}
+
+.col-title.practice { color: var(--amber); border-bottom-color: rgba(184,92,0,0.2); }
+.col-title.mini { color: var(--muted); }
+
+/* SQL code snippet look for concepts */
+.concepts {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.concepts li {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--ink2);
+  padding: 3px 8px 3px 14px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.concepts li::before {
+  content: '--';
+  position: absolute;
+  left: 0;
+  color: var(--border2);
+}
+
+.practice-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.practice-list li {
+  font-size: 11px;
+  color: var(--ink2);
+  padding: 7px 10px;
+  background: var(--amber-bg);
+  border-left: 2px solid var(--amber);
+  line-height: 1.6;
+}
+
+.practice-list li strong {
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--amber);
+  font-size: 9px;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.mp-box {
+  padding: 10px;
+  border: 1px solid var(--border);
+  background: var(--green-bg);
+  margin-bottom: 8px;
+}
+
+.mp-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--green);
+  margin-bottom: 4px;
+}
+
+.mp-desc {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* Schema snippet display */
+.sql-snippet {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  background: var(--ink);
+  color: #a8d8a8;
+  padding: 10px 12px;
+  border-radius: 0;
+  margin-top: 10px;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+
+.sql-kw { color: #66d9ef; }
+.sql-str { color: #a6e22e; }
+.sql-cm { color: #4a8a4a; }
+
+/* Projects section */
+.projects-wrapper {
+  border-top: 3px solid var(--ink);
+}
+
+.proj-header {
+  background: var(--ink);
+  padding: 48px 48px 36px;
+  border-bottom: 1px solid #2a4a2a;
+}
+
+.proj-header-inner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 24px;
+}
+
+.proj-h-title {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 700;
+  color: #e0f0e0;
+  line-height: 1;
+}
+
+.proj-h-title span { color: var(--green-light); }
+
+.proj-h-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #4a8a4a;
+  margin-top: 10px;
+  letter-spacing: 2px;
+}
+
+.proj-count {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 80px;
+  font-weight: 600;
+  color: #2a4a2a;
+  line-height: 1;
+}
+
+.proj-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.proj-card {
+  padding: 28px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+  position: relative;
+  transition: background 0.15s;
+}
+
+.proj-card:hover { background: var(--bg2); }
+
+.proj-card-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 42px;
+  font-weight: 600;
+  color: var(--border2);
+  line-height: 1;
+  margin-bottom: 14px;
+}
+
+.proj-difficulty {
+  position: absolute;
+  top: 28px;
+  right: 28px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.proj-difficulty.beginner { color: var(--green); }
+.proj-difficulty.intermediate { color: var(--amber); }
+.proj-difficulty.advanced { color: var(--red); }
+
+.proj-card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.proj-card-desc {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 14px;
+}
+
+.proj-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.proj-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  padding: 2px 7px;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+footer {
+  background: var(--ink);
+  color: #4a8a4a;
+  padding: 20px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-brand { color: var(--green-light); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 700px) {
+  header { grid-template-columns: 1fr; }
+  .header-panel { border-top: 1px solid #2a4a2a; }
+  header, .proj-header, footer { padding: 28px 20px; }
+  .body-inner { grid-template-columns: 1fr; }
+  .body-col { border-right: none; border-bottom: 1px solid var(--border); }
+  .proj-header-inner { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body><nav style="position:sticky;top:0;z-index:9000;background:rgba(7,8,15,0.95);backdrop-filter:blur(16px);border-bottom:1px solid #1c2040;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:52px;font-family:'JetBrains Mono',monospace"><a href="index.html" style="color:#6c8eff;font-size:12px;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:8px;letter-spacing:1px;"><span style="background:linear-gradient(135deg,#6c8eff,#a855f7);width:24px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;color:white;font-weight:700">DM</span>DevMastery</a><div style="display:flex;gap:4px;overflow-x:auto"><a href="html-css.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap;transition:color 0.2s" onmouseover="this.style.color='#e34c26'" onmouseout="this.style.color='#4a5280'">HTML/CSS</a><a href="javascript.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap" onmouseover="this.style.color='#d4b800'" onmouseout="this.style.color='#4a5280'">JavaScript</a><a href="react.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap" onmouseover="this.style.color='#61dafb'" onmouseout="this.style.color='#4a5280'">React</a><a href="nodejs.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap" onmouseover="this.style.color='#68a063'" onmouseout="this.style.color='#4a5280'">Node.js</a><a href="sql.html" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#4a5280;text-decoration:none;padding:5px 10px;border-radius:4px;white-space:nowrap" onmouseover="this.style.color='#2d9e2d'" onmouseout="this.style.color='#4a5280'">SQL</a></div></nav>
+
+<header>
+  <div class="header-main">
+    <div class="term-prompt">SELECT * FROM knowledge WHERE topic = 'SQL'<span class="cursor"></span></div>
+    <div>
+      <h1><span class="sql">SQL</span><br>Mastery<br>Roadmap</h1>
+      <p class="header-sub">-- From basic SELECT to query optimization.<br>-- Every concept, challenge, and project to master databases.</p>
+    </div>
+  </div>
+  <div class="header-panel">
+    <div class="panel-title">-- stats</div>
+    <div class="stat-rows">
+      <div class="stat-row"><span class="sr-label">topics:</span><span class="sr-val" id="topicCount">—</span></div>
+      <div class="stat-row"><span class="sr-label">challenges:</span><span class="sr-val" id="practiceCount">—</span></div>
+      <div class="stat-row"><span class="sr-label">projects:</span><span class="sr-val">8</span></div>
+    </div>
+    <div class="prog-section">
+      <div class="prog-label">
+        <span>-- progress</span>
+        <span id="progText">0 / 0</span>
+      </div>
+      <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+    </div>
+  </div>
+</header>
+
+<nav class="filter-nav">
+  <button class="filter-btn active" onclick="filter('all',this)">All Topics</button>
+  <button class="filter-btn" onclick="filter('beginner',this)">Beginner</button>
+  <button class="filter-btn" onclick="filter('intermediate',this)">Intermediate</button>
+  <button class="filter-btn" onclick="filter('advanced',this)">Advanced</button>
+</nav>
+
+<div id="roadmap"></div>
+
+<div class="projects-wrapper">
+  <div class="proj-header">
+    <div class="proj-header-inner">
+      <div>
+        <h2 class="proj-h-title">Build &<br><span>Query</span> These</h2>
+        <p class="proj-h-sub">-- Real database projects to prove your SQL mastery</p>
+      </div>
+      <div class="proj-count">08</div>
+    </div>
+  </div>
+  <div class="proj-grid" id="projGrid"></div>
+</div>
+
+<footer>
+  <span class="footer-brand">-- SQL MASTERY ROADMAP 2025</span>
+  <span id="footerInfo">Click topic to expand · Check to track progress</span>
+</footer>
+
+<script>
+const data = [
+  {
+    phase: "01", title: "SQL Fundamentals", scope: "DML",
+    topics: [
+      { name:"SELECT & Basic Queries", level:"beginner", badges:["beginner","query"],
+        concepts:["SELECT * and specific columns","FROM clause","WHERE clause and conditions","Comparison operators: =, !=, <, >, <=, >=","Logical operators: AND, OR, NOT","BETWEEN ... AND","IN and NOT IN","IS NULL / IS NOT NULL","LIKE and wildcards (%, _)","ORDER BY: ASC and DESC","LIMIT and OFFSET"],
+        practice:["Select all employees with salary > 50000","Find all products whose name starts with 'A'","Get the top 5 most expensive products","Select users where email is NULL","Find orders placed between two dates"],
+        projects:[{name:"Store Query Exercises",desc:"20 progressively harder SELECT queries on a sample e-commerce database"}]
+      },
+      { name:"Filtering & Sorting", level:"beginner", badges:["beginner","query"],
+        concepts:["WHERE with multiple conditions","CASE WHEN ... THEN ... ELSE ... END","COALESCE() for null handling","NULLIF()","Aliases with AS","DISTINCT keyword","Sorting by multiple columns","ORDER BY with expressions"],
+        practice:["Classify products as 'Cheap', 'Mid', 'Expensive' with CASE WHEN","Replace NULL phone numbers with 'N/A' using COALESCE","Get distinct cities from a customers table","Sort employees by department then by salary descending"],
+        projects:[{name:"Data Cleaning with SQL",desc:"Transform messy raw data with CASE, COALESCE, and NULLIF"}]
+      }
+    ]
+  },
+  {
+    phase: "02", title: "Aggregation & Grouping", scope: "DML",
+    topics: [
+      { name:"Aggregate Functions", level:"beginner", badges:["beginner","query"],
+        concepts:["COUNT(*) vs COUNT(column)","SUM(), AVG(), MIN(), MAX()","GROUP BY clause","HAVING clause (filter on aggregates)","Difference: WHERE vs HAVING","Grouping by multiple columns","GROUP BY with ROLLUP","Aggregate with DISTINCT"],
+        practice:["Count orders per customer","Find average salary by department","Get department with highest total salary","Find months with more than 100 orders using HAVING","Calculate min, max, avg product price per category"],
+        projects:[{name:"Sales Analytics Dashboard Queries",desc:"20 aggregate queries for a sales reporting system"}]
+      },
+      { name:"Window Functions", level:"advanced", badges:["advanced","query"],
+        concepts:["OVER() clause","PARTITION BY","ORDER BY within window","ROW_NUMBER()","RANK() and DENSE_RANK()","NTILE(n)","LAG() and LEAD()","FIRST_VALUE() and LAST_VALUE()","Running totals with SUM() OVER","Moving averages","ROWS BETWEEN ... AND ..."],
+        practice:["Rank employees by salary within each department","Calculate running total of sales by month","Find each employee's salary vs department average","Get each row's previous row value with LAG()","Assign quartiles to products by price with NTILE(4)"],
+        projects:[{name:"HR Analytics Report",desc:"Employee ranking, salary bands, and department comparisons using window functions"}]
+      }
+    ]
+  },
+  {
+    phase: "03", title: "Joins & Relationships", scope: "DML",
+    topics: [
+      { name:"JOINs", level:"beginner", badges:["beginner","query"],
+        concepts:["INNER JOIN","LEFT JOIN (LEFT OUTER JOIN)","RIGHT JOIN","FULL OUTER JOIN","CROSS JOIN","SELF JOIN","Multiple joins in one query","JOIN with conditions (ON clause)","Joining on multiple columns","Non-equi joins"],
+        practice:["Get all customers with their orders (include customers with no orders)","Find employees with their manager's name using SELF JOIN","List products never ordered (anti-join pattern)","Join 3 tables: orders + customers + products"],
+        projects:[{name:"E-Commerce Report Builder",desc:"Complex queries joining 5+ tables for a full order/inventory report"}]
+      },
+      { name:"Subqueries & CTEs", level:"intermediate", badges:["intermediate","query"],
+        concepts:["Subquery in WHERE clause","Subquery in FROM clause (derived table)","Subquery in SELECT clause","Correlated subqueries","EXISTS and NOT EXISTS","IN with subquery vs JOIN","CTE with WITH clause","Recursive CTEs","Multiple CTEs chained","CTE vs subquery: when to use each"],
+        practice:["Find customers who spent more than the average order value","Get products with price above category average using correlated subquery","Build a category hierarchy using recursive CTE","Refactor a nested subquery into a CTE"],
+        projects:[{name:"Recursive Org Chart Builder",desc:"Build manager→employee hierarchy using recursive CTEs"}]
+      }
+    ]
+  },
+  {
+    phase: "04", title: "Data Definition & Manipulation", scope: "DDL",
+    topics: [
+      { name:"DDL: Tables & Constraints", level:"beginner", badges:["beginner","ddl"],
+        concepts:["CREATE TABLE syntax","Data types: INT, VARCHAR, TEXT, DATE, TIMESTAMP, BOOLEAN, DECIMAL","PRIMARY KEY and AUTO_INCREMENT","FOREIGN KEY and references","UNIQUE constraint","NOT NULL constraint","DEFAULT values","CHECK constraints","ALTER TABLE: add/drop/modify columns","DROP TABLE and TRUNCATE vs DELETE","Indexes: CREATE INDEX"],
+        practice:["Design a schema for a library system (books, members, loans)","Add a CHECK constraint that ensures age > 0","Alter a table to add a created_at column with DEFAULT NOW()","Create a unique compound index on (email, tenant_id)"],
+        projects:[{name:"Schema Design: Blog Platform",desc:"Design normalized schema for posts, users, comments, tags, likes"}]
+      },
+      { name:"DML: INSERT, UPDATE, DELETE", level:"beginner", badges:["beginner","dml"],
+        concepts:["INSERT INTO ... VALUES","INSERT from SELECT","Bulk inserts","UPDATE with WHERE","UPDATE with JOIN","DELETE with WHERE","DELETE vs TRUNCATE","UPSERT: INSERT ON CONFLICT DO UPDATE (Postgres) / INSERT ... ON DUPLICATE KEY UPDATE (MySQL)","Returning updated rows","Transaction safety with DML"],
+        practice:["Insert 10 products from a SELECT on another table","Update all prices in a category by 10%","Delete orders older than 2 years","Upsert a user record (update if exists, insert if not)"],
+        projects:[{name:"Data Migration Script",desc:"Write SQL to migrate and transform data from an old schema to a new one"}]
+      },
+      { name:"Transactions", level:"intermediate", badges:["intermediate","ddl"],
+        concepts:["BEGIN / COMMIT / ROLLBACK","ACID properties explained","Savepoints","Isolation levels: READ UNCOMMITTED, READ COMMITTED, REPEATABLE READ, SERIALIZABLE","Dirty reads, non-repeatable reads, phantom reads","Deadlocks and how to avoid them","Row-level locking","SELECT FOR UPDATE"],
+        practice:["Write a bank transfer transaction with rollback on failure","Demonstrate a dirty read scenario","Use a savepoint to partially rollback a transaction","Identify which isolation level prevents phantom reads"],
+        projects:[{name:"Banking System Transactions",desc:"Debit/credit system with proper ACID transactions and error handling"}]
+      }
+    ]
+  },
+  {
+    phase: "05", title: "Advanced SQL & Optimization", scope: "Advanced",
+    topics: [
+      { name:"Indexes & Query Optimization", level:"advanced", badges:["advanced","perf"],
+        concepts:["How B-Tree indexes work","Clustered vs non-clustered indexes","Composite indexes and column order","Covering indexes","Index selectivity","EXPLAIN / EXPLAIN ANALYZE output reading","seq scan vs index scan","Query planner hints","Avoiding full table scans","N+1 problem","Optimizing GROUP BY and ORDER BY","Partial indexes"],
+        practice:["Run EXPLAIN ANALYZE on a slow query and interpret output","Create a composite index and verify it's used","Find and fix a missing index causing a slow join","Add a partial index for a common filtered query (WHERE is_active = true)"],
+        projects:[{name:"Query Performance Audit",desc:"Audit 10 slow queries, add indexes, and document before/after EXPLAIN results"}]
+      },
+      { name:"Views, Stored Procedures & Triggers", level:"intermediate", badges:["intermediate","ddl"],
+        concepts:["CREATE VIEW and updatable views","Materialized views","Stored procedures vs functions","IN, OUT, INOUT parameters","DECLARE and variables","Loops in procedures","Triggers: BEFORE / AFTER INSERT/UPDATE/DELETE","Trigger use cases","Pros and cons of stored logic"],
+        practice:["Create a view that joins orders, customers, and products","Write a stored procedure that calculates and updates monthly stats","Build a trigger that logs every price change to an audit table","Create a materialized view and refresh it on demand"],
+        projects:[{name:"Audit Log System",desc:"Triggers + audit table that tracks all changes to critical tables"}]
+      },
+      { name:"Advanced Patterns & JSON", level:"advanced", badges:["advanced"],
+        concepts:["JSON data type in PostgreSQL / MySQL","JSON functions: JSON_EXTRACT, ->>, jsonb_array_elements","Querying nested JSON","ARRAY type (PostgreSQL)","ANY and ALL operators","Pivot tables (CASE WHEN + GROUP BY)","Dynamic SQL","Full-text search (TSVECTOR, TSQUERY)","Partitioning tables","Common Table Expressions patterns"],
+        practice:["Query a JSONB column to filter by nested properties","Pivot a sales table from rows to columns by month","Implement full-text search on a products table","Create a range partition on an orders table by year"],
+        projects:[{name:"JSON Analytics Engine",desc:"Store, query, and aggregate semi-structured JSON product catalog data"}]
+      }
+    ]
+  }
+];
+
+const projects = [
+  { difficulty:"beginner", title:"Library Database", desc:"Design and query a library system. Track books, members, loans, late fees. Write 25 queries.", tags:["SELECT","JOIN","GROUP BY","DDL"] },
+  { difficulty:"beginner", title:"E-Commerce Schema", desc:"Full schema: users, products, categories, orders, order_items. Populate and query for common reports.", tags:["DDL","Joins","Aggregates","Subqueries"] },
+  { difficulty:"intermediate", title:"HR Analytics System", desc:"Employee db with departments, salaries, promotions. Generate reports using window functions and CTEs.", tags:["Window Functions","CTEs","GROUP BY","Analysis"] },
+  { difficulty:"intermediate", title:"Social Media Database", desc:"Users, posts, likes, comments, follows. Find trending posts, mutual friends, and feed queries.", tags:["Self Join","Recursive CTE","Subqueries","Indexes"] },
+  { difficulty:"intermediate", title:"Banking System", desc:"Accounts, transactions, transfers with full ACID transactions. Implement balance checks and audit log.", tags:["Transactions","Triggers","Stored Procs","DDL"] },
+  { difficulty:"advanced", title:"Data Warehouse & ETL", desc:"Star schema for sales analytics. Write ETL SQL to load, transform, and aggregate from OLTP source.", tags:["Star Schema","CTEs","Window Fns","Partitioning"] },
+  { difficulty:"advanced", title:"Query Optimization Lab", desc:"Take 10 poorly written queries, analyze with EXPLAIN, add indexes, and document 10x performance gains.", tags:["EXPLAIN","Indexes","Optimization","Performance"] },
+  { difficulty:"advanced", title:"Full-Stack SQL Integration", desc:"Build a Node.js app backed by PostgreSQL. Use prepared statements, connection pooling, and migrations.", tags:["PostgreSQL","Node.js","pg library","Migrations"] }
+];
+
+function toggle(card){ card.classList.toggle('open'); }
+function markDone(e,card){ e.stopPropagation(); card.classList.toggle('completed'); updateProg(); }
+function filter(val,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.topic-card').forEach(c=>{
+    c.style.display=(val==='all'||c.dataset.level===val)?'':'none';
+  });
+}
+function updateProg(){
+  const all=document.querySelectorAll('.topic-card'),done=document.querySelectorAll('.topic-card.completed');
+  const p=all.length?(done.length/all.length*100):0;
+  document.getElementById('progFill').style.width=p+'%';
+  document.getElementById('progText').textContent=`${done.length} / ${all.length}`;
+  document.getElementById('footerInfo').textContent=`${Math.round(p)}% complete`;
+}
+
+function render(){
+  let topics=0,practice=0;
+  document.getElementById('roadmap').innerHTML=data.map(phase=>`
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num-cell">
+          <span class="phase-sql">PHASE</span>
+          <span class="phase-num-big">${phase.phase}</span>
+        </div>
+        <div class="phase-title-cell">
+          <span class="phase-title">${phase.title}</span>
+          <span class="phase-scope">${phase.scope}</span>
+        </div>
+      </div>
+      <div class="topics-grid">
+        ${phase.topics.map(t=>{
+          topics++; practice+=t.practice.length;
+          return `
+          <div class="topic-card" data-level="${t.level}" onclick="toggle(this)">
+            <div class="topic-head">
+              <div class="topic-check" onclick="markDone(event,this.closest('.topic-card'))">✓</div>
+              <div class="topic-meta">
+                <div class="topic-name">${t.name}</div>
+                <div class="badges">${t.badges.map(b=>`<span class="badge badge-${b}">${b}</span>`).join('')}</div>
+              </div>
+              <div class="topic-arrow">›</div>
+            </div>
+            <div class="topic-body">
+              <div class="body-inner">
+                <div class="body-col">
+                  <div class="col-title">-- concepts</div>
+                  <ul class="concepts">${t.concepts.map(c=>`<li>${c}</li>`).join('')}</ul>
+                  ${t.projects?`
+                    <div style="margin-top:16px">
+                      <div class="col-title mini">-- mini project</div>
+                      ${t.projects.map(p=>`<div class="mp-box"><div class="mp-name">▸ ${p.name}</div><div class="mp-desc">${p.desc}</div></div>`).join('')}
+                    </div>`:''}
+                </div>
+                <div class="body-col">
+                  <div class="col-title practice">-- practice challenges</div>
+                  <ul class="practice-list">${t.practice.map((p,i)=>`<li><strong>challenge_${i+1}:</strong>${p}</li>`).join('')}</ul>
+                </div>
+              </div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`).join('');
+  document.getElementById('topicCount').textContent=topics;
+  document.getElementById('practiceCount').textContent=practice;
+  updateProg();
+}
+
+function renderProjects(){
+  document.getElementById('projGrid').innerHTML=projects.map((p,i)=>`
+    <div class="proj-card">
+      <div class="proj-difficulty ${p.difficulty}">${p.difficulty}</div>
+      <div class="proj-card-num">${String(i+1).padStart(2,'0')}</div>
+      <div class="proj-card-title">${p.title}</div>
+      <div class="proj-card-desc">${p.desc}</div>
+      <div class="proj-tags">${p.tags.map(t=>`<span class="proj-tag">${t}</span>`).join('')}</div>
+    </div>`).join('');
+}
+
+render(); renderProjects();
+</script>
+</body>
+</html>
